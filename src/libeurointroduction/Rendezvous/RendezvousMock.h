@@ -1,13 +1,5 @@
-/*------------------------------------------------------------------------------
-	RendezvousMock.h
 
-	<summary>
-
-	Copyright (c) 2013 Qualcomm, Inc. All rights reserved.  
-	Confidential and Proprietary.
-	This software may be subject to U.S. and international export laws.
-	Diversion contrary to U.S. and international laws is strictly prohibited.
-------------------------------------------------------------------------------*/
+//NOTE: This file has been modified from a library written by Randall Smith
 
 #ifndef RENDEZVOUSMOCK_H_
 #define RENDEZVOUSMOCK_H_

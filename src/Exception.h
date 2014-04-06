@@ -1,18 +1,9 @@
-/*------------------------------------------------------------------------------
-	Exception.h
-
-	<summary>
-
-	Copyright (c) 2013 Qualcomm, Inc. All rights reserved.  
-	Confidential and Proprietary.
-	This software may be subject to U.S. and international export laws.
-	Diversion contrary to U.S. and international laws is strictly prohibited.
-------------------------------------------------------------------------------*/
-
 #ifndef EXCEPTION_H_
 #define EXCEPTION_H_
 
 #include <boost/exception/all.hpp>
+
+//NOTE: This file has been modified from a library written by Randall Smith
 
 
 /*-----------------------------------------------------------------------------
@@ -29,12 +20,12 @@
         std::exception::what: std::exception
  ----------------------------------------------------------------------------*/
 
-struct Exception :
+struct RoboException :
     virtual std::exception,          // Standard C++ exception base class.
     virtual boost::exception         // Allow additions of data.
 {
     // Ctor.
-    Exception()
+    RoboException()
     {
 
     }
@@ -69,15 +60,12 @@ typedef boost::error_info<struct tag_error_code, int> ErrCode;
 
         // Throws my derivative of |Exception|.
         THROW_MY_EXCEPTION(MyException(), M2M_ERR_UNKNOWN_ERROR, "An unknown error occurred.);
-
-      Note:  The error code values should be drawn from M2mErrorCodes.h; these
-      are frequently returned to M2M applications, and so should track this file.
  ----------------------------------------------------------------------------*/
 
-#define THROW_EXCEPTION(__errorCode, __errorMessage) \
-    BOOST_THROW_EXCEPTION(Exception() << ErrMsg(__errorMessage))
+#define THROW_EXCEPTION( __errorMessage) \
+    BOOST_THROW_EXCEPTION(RoboException() << ErrMsg(__errorMessage))
 
-#define THROW_MY_EXCEPTION(__exception, __errorCode, __errorMessage) \
+#define THROW_MY_EXCEPTION(__exception, __errorMessage) \
     BOOST_THROW_EXCEPTION(__exception << ErrMsg(__errorMessage))
 
 

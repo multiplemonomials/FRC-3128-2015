@@ -22,6 +22,20 @@ class SwerveDrive
      double spdL, spdR, spdB;
      double angL, angR, angB;
 
+     std::shared_ptr<GyroLink> _gyr;
+
+     std::shared_ptr<MotorLink> _rotFR;
+
+     std::shared_ptr<MotorLink> _rotFL;
+
+     std::shared_ptr<MotorLink> _rotBk;
+
+     std::shared_ptr<MotorLink> _drvFR;
+
+     std::shared_ptr<MotorLink> _drvFL;
+
+     std::shared_ptr<MotorLink> _drvBk;
+
      //serializes calls to steer() and runs them off the calling thread
      CmdProcessor _cmdProcessor;
 

@@ -68,7 +68,7 @@ void SwerveDrive::steerHandler(ListenerManager & listenerManager)
     rot = x2;
 
     if (std::abs(vel) > 0.1)
-        theta = RobotMath::rTD(atan2(y1, x1)) + Global.gyr.getAngle();
+        theta = RobotMath::rTD(atan2(y1, x1)) + _gyr->getAngle();
     else
         vel = 0;
 
@@ -90,13 +90,13 @@ void SwerveDrive::steerHandler(ListenerManager & listenerManager)
     //DebugLog.log(DebugLog.LVL_STREAM, this, "b: " + angB);
     //DebugLog.log(DebugLog.LVL_STREAM, this, "rot: " + rot);
 
-    std::pair<double, double> r = optimizeSwerve(Global.rotFR.getEncoderAngle(), angR, spdR);
-    std::pair<double, double> l = optimizeSwerve(Global.rotFL.getEncoderAngle(), angL, spdL);
-    std::pair<double, double> b = optimizeSwerve(Global.rotBk.getEncoderAngle(), angB, spdB);
+    std::pair<double, double> r = optimizeSwerve(_rotFR->getEncoderAngle(), angR, spdR);
+    std::pair<double, double> l = optimizeSwerve(_rotFL->getEncoderAngle(), angL, spdL);
+    std::pair<double, double> b = optimizeSwerve(_rotBk->getEncoderAngle(), angB, spdB);
 
-    Global.rotFR.setControlTarget(r[0]+(x1 == 0 && x2 != 0 ? 0.1 : 0));
-    Global.rotFL.setControlTarget(l[0]+(x1 == 0 && x2 != 0 ? 0.1 : 0));
-    Global.rotBk.setControlTarget(b[0]+(x1 == 0 && x2 != 0 ? 0.1 : 0));
+    _rotFR->setControlTarget(r.first +(x1 == 0 && x2 != 0 ? 0.1 : 0));
+    _rotFL->setControlTarget(l.first +(x1 == 0 && x2 != 0 ? 0.1 : 0));
+    _rotBk->setControlTarget(b.first +(x1 == 0 && x2 != 0 ? 0.1 : 0));
 
     if (std::abs(r.second) > 1 || std::abs(l.second) > 1 || std::abs(b.second) > 1)
     {
@@ -105,8 +105,8 @@ void SwerveDrive::steerHandler(ListenerManager & listenerManager)
         l.second /= scl;
         b.second /= scl;
     }
-    Global.drvFR.setSpeed(r.second);
-    Global.drvFL.setSpeed(-l.second);
-    Global.drvBk.setSpeed(b.second);
+    _drvFR->setSpeed(r.second);
+    _drvFL->setSpeed(-l.second);
+    _drvBk->setSpeed(b.second);
 }
 

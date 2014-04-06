@@ -11,6 +11,8 @@
 #include <stdint.h>
 #include <iomanip>
 
+//NOTE: This file has been modified from a library written by Randall Smith
+
 /*-----------------------------------------------------------------------------
     Small type that allows pointer values to be, e.g., compared and printed.
  ----------------------------------------------------------------------------*/

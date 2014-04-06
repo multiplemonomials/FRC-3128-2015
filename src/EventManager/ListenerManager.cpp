@@ -9,6 +9,7 @@
 #include <LogMacros.h>
 #include <Util/Time.h>
 #include <FunctionTimer/functimer.hpp>
+#include <Exception.h>
 
 #include <unordered_set>
 
@@ -54,10 +55,8 @@ bool ListenerManager::getRawBool(Listenable listenable)
 	}
 	else
 	{
-		LOG_FATAL("Attempt to get boolean value of control listenable " << listenable << " which is not a boolean");
-
 		//TODO: custom exception class
-		throw std::exception();
+		THROW_EXCEPTION("Attempt to get boolean value of control listenable " << listenable << " which is not a boolean");
 	}
 }
 
