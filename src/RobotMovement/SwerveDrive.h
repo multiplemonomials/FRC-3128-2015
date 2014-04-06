@@ -12,6 +12,7 @@
 
 #include <EventManager/CmdProcessor.h>
 #include <EventManager/ListenerManager.h>
+#include <HardwareLink/Motor/MotorLink.h>
 
 class SwerveDrive
 {

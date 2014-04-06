@@ -65,7 +65,7 @@ typedef boost::error_info<struct tag_error_code, int> ErrCode;
 #define THROW_EXCEPTION( __errorMessage) \
     BOOST_THROW_EXCEPTION(RoboException() << ErrMsg(__errorMessage))
 
-#define THROW_MY_EXCEPTION(__exception, __errorMessage) \
+#define THROW_CUSTOM_EXCEPTION(__exception, __errorMessage) \
     BOOST_THROW_EXCEPTION(__exception << ErrMsg(__errorMessage))
 
 

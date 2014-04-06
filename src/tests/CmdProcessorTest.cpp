@@ -28,7 +28,7 @@ BOOST_AUTO_TEST_SUITE(CmdProcessorTestSuite)
 void HandlerFunction(int arg)
 {
     BOOST_MESSAGE("HandlerFunction() invoked.  arg = '" << arg << "'.");
-    THROW_EXCEPTION(0, "error");
+    THROW_EXCEPTION("error");
 }
 
 struct HandlerClass
@@ -38,21 +38,21 @@ struct HandlerClass
     void operator()(int const & arg)
     {
         BOOST_MESSAGE("HandlerClass::operator() invoked.  arg = '" << arg << "'.");
-        THROW_EXCEPTION(0, "error");
+        THROW_EXCEPTION("error");
     }
 
     // Takes no arguments.
     void HandlerFunc1()
     {
         BOOST_MESSAGE("HandlerClass::HandlerFunc1 invoked.");
-        THROW_EXCEPTION(0, "error");
+        THROW_EXCEPTION("error");
     }
 
     // Takes two (const ref) arguments of different types.
     void HandlerFunc2(int const & arg1, double const & arg2)
     {
         BOOST_MESSAGE("HandlerClass::HandlerFunc2 invoked.  arg1 = '" << arg1 << "', arg2 = '" << arg2 << "'.");
-        THROW_EXCEPTION(0, "error");
+        THROW_EXCEPTION("error");
     }
 
     // Takes two arguments of different types.  One is used to provide input, the other to receive output.
@@ -116,19 +116,19 @@ BOOST_AUTO_TEST_CASE(Basic)
 
     // Free (C-style) function handler.
     Cmd::Functor            cmd1(boost::bind<void>(HandlerFunction, 81));
-    BOOST_CHECK_THROW(cmd1(), Exception);
+    BOOST_CHECK_THROW(cmd1(), RoboException);
 
     // Functor handler.
     Cmd::Functor            cmd2(boost::bind<void>(handler, 44));
-    BOOST_CHECK_THROW(cmd2(), Exception);
+    BOOST_CHECK_THROW(cmd2(), RoboException);
 
     // Ptr-to-member-function.
     Cmd::Functor            cmd3(boost::bind<void>(&HandlerClass::HandlerFunc1, handler));
-    BOOST_CHECK_THROW(cmd3(), Exception);
+    BOOST_CHECK_THROW(cmd3(), RoboException);
 
     // Ptr-to-member-function.
     Cmd::Functor            cmd4(boost::bind<void>(&HandlerClass::HandlerFunc2, handler, 999, 1.27));
-    BOOST_CHECK_THROW(cmd4(), Exception);
+    BOOST_CHECK_THROW(cmd4(), RoboException);
 
     // Ptr-to-member-function.
     std::string             inputValue("foo");

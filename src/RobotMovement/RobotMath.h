@@ -10,7 +10,7 @@
 
 #include <math.h>
 
-#include <HardwareLink/MotorDir.h>
+#include <HardwareLink/Motor/MotorDir.h>
 
 class RobotMath
 {

@@ -55,7 +55,6 @@ bool ListenerManager::getRawBool(Listenable listenable)
 	}
 	else
 	{
-		//TODO: custom exception class
 		THROW_EXCEPTION("Attempt to get boolean value of control listenable " << listenable << " which is not a boolean");
 	}
 }
@@ -79,10 +78,7 @@ double ListenerManager::getRawDouble(Listenable listenable)
 	}
 	else
 	{
-		LOG_FATAL("Attempt to get boolean value of control listenable " << listenable << " which is not a boolean");
-
-		//TODO: custom exception class
-		throw std::exception();
+		THROW_EXCEPTION("Attempt to get double value of control listenable " << listenable << " which is not a double");
 	}
 }
 
@@ -180,7 +176,10 @@ void ListenerManager::operator()()
 				{
 					(*listener)(*this);
 				}
-				//TODO custom exception class
+				catch(RoboException & error)
+				{
+					LOG_RECOVERABLE("Caught a RoboException from a control listener: \n" << error.what());
+				}
 				catch(...)
 				{
 					LOG_RECOVERABLE("Caught... something from a control listener")
