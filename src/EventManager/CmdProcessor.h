@@ -72,6 +72,12 @@ public:
         _queue.Enqueue(std::make_shared<Cmd::Functor>(boost::bind<void>(std::forward<BindArgs>(bindArgs)...)));
     }
 
+    // Builds a Cmd with the specified ctor arguments, then puts it on the processing queue.
+    void EnqueueLambda(Cmd::Functor function)
+    {
+        _queue.Enqueue(std::shared_ptr<Cmd::Functor>(&function));
+    }
+
 
     // Builds a Cmd with the specified ctor arguments, then puts it on the front (i.e. next to execute) on the processing queue.
     template<typename... BindArgs>

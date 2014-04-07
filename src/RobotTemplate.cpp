@@ -21,15 +21,17 @@ struct RobotTemplate : public IterativeRobot
 	bool autonomousHasBeenInit = false;
 	bool teleopHasBeenInit = false;
 
+	Global _global;
+
 	void RobotInit()
 	{
-		LOG_INFO("Welcome to the FRC Team 3128 Event System!")
-		Global::initializeRobot();
+		LOG_INFO("Welcome to the FRC Team 3128 Event System Version 2!")
+		_global.initializeRobot();
 	}
 
 	void DisabledInit()
 	{
-		Global::initializeDisabled();
+		_global.initializeDisabled();
 	}
 
     void AutonomousInit()
@@ -38,7 +40,7 @@ struct RobotTemplate : public IterativeRobot
         {
             //TODO EventManager.dropAllEvents();
             //TODO ListenerManager.dropAllListeners();
-            Global::initializeAuto();
+        	_global.initializeAuto();
             autonomousHasBeenInit = true;
             teleopHasBeenInit = false;
         }
@@ -51,7 +53,7 @@ struct RobotTemplate : public IterativeRobot
             //TODO EventSequencer.stopAllSequencers();
             //TODO EventManager.dropAllEvents();
             //TODO ListenerManager.dropAllListeners();
-            Global::initializeTeleop();
+        	_global.initializeTeleop();
             teleopHasBeenInit = true;
             autonomousHasBeenInit = false;
         }
@@ -66,13 +68,13 @@ struct RobotTemplate : public IterativeRobot
     void AutonomousPeriodic()
     {
     	GetWatchdog().Feed();
-        boost::this_thread::sleep(boost::posix_time::milliseconds(100));
+        boost::this_thread::sleep(boost::posix_time::milliseconds(150));
     }
 
     void TeleopPeriodic()
     {
     	GetWatchdog().Feed();
-        boost::this_thread::sleep(boost::posix_time::milliseconds(100));
+        boost::this_thread::sleep(boost::posix_time::milliseconds(150));
     }
 
 };

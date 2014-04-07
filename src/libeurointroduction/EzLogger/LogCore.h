@@ -8,7 +8,7 @@
 #ifndef LOGCORE_H_
 #define LOGCORE_H_
 
-#include "boost/thread/mutex.hpp"
+#include <boost/thread/mutex.hpp>
 #include <boost/foreach.hpp>
 //getting error "can't find boost/thread/lock_types.hpp"?
 //upgrade to boost 1.54 or later

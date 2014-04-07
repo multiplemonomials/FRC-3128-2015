@@ -8,7 +8,7 @@
 #ifndef MOTORDIR_H_
 #define MOTORDIR_H_
 
-enum class MotorDir
+enum MotorDir
 {
 	CCW = -1,
 	NONE = 0,

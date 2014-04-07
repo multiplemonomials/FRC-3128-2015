@@ -74,6 +74,21 @@ void CmdTimerPosix::CmdTimerPosixImpl::TimerSetTime
     //LOG_DEBUG("CmdTimerPosix::CmdTimerPosixImpl::TimerSetTime() Set time to " << seconds << " seconds, " << nanoseconds << " nanoseconds.");
 }
 
+/*-----------------------------------------------------------------------------
+
+ ----------------------------------------------------------------------------*/
+
+bool CmdTimerPosix::CmdTimerPosixImpl::TimerIsRunning()
+{
+	DEFINE_ZEROED_STRUCT(struct itimerspec, myItimerspec);
+
+	timer_gettime(_timerId, &myItimerspec);
+
+	// "If the value returned in itimerspec->curr_value->it_value is zero, then
+    //the timer is currently disarmed."
+	return (myItimerspec.it_value.tv_nsec != 0) || (myItimerspec.it_value.tv_sec != 0);
+}
+
 
 /*-----------------------------------------------------------------------------
 

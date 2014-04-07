@@ -20,7 +20,7 @@
 class SensorBase: public ErrorBase {
 public:
 	SensorBase();
-	virtual ~SensorBase();
+	virtual ~SensorBase(){};
 	static void DeleteSingletons();
 	static uint32_t GetDefaultAnalogModule() { return 1; }
 	static uint32_t GetDefaultDigitalModule() { return 1; }

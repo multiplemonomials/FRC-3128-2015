@@ -8,7 +8,11 @@
 #ifndef MAGNETICPOTENCODER_H_
 #define MAGNETICPOTENCODER_H_
 
-class MagneticPotEncoder
+#include <AnalogChannel.h>
+
+#include "AbstractEncoder.h"
+
+class MagneticPotEncoder : public AbstractEncoder
 {
 	AnalogChannel _enc;
 

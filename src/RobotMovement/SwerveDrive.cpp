@@ -29,7 +29,10 @@ std::pair<double, double> SwerveDrive::optimizeSwerve(double ang1, double ang2, 
 	return returnVals;
 }
 
-SwerveDrive::SwerveDrive()
+SwerveDrive::SwerveDrive(std::shared_ptr<Gyro> gyr, std::shared_ptr<MotorLink> rotFR,
+			std::shared_ptr<MotorLink> rotFL, std::shared_ptr<MotorLink> rotBk,
+			std::shared_ptr<MotorLink> drvFR, std::shared_ptr<MotorLink> drvFL,
+			std::shared_ptr<MotorLink> drvBk, ListenerManager & listenerManager)
 :vel(),
 theta(),
 rot(),
@@ -41,14 +44,22 @@ spdB(),
 angL(),
 angR(),
 angB(),
+_gyr(gyr),
+_rotFR(rotFR),
+_rotFL(rotFL),
+_rotBk(rotBk),
+_drvFR(drvFR),
+_drvFL(drvFL),
+_drvBk(drvBk),
+_listenerManager(listenerManager),
 _cmdProcessor("SwerveDriveCmdProcessor")
 {
 
 }
 
-void SwerveDrive::steer(ListenerManager & listenerManager)
+void SwerveDrive::steer()
 {
-	Cmd::MakeShared(&SwerveDrive::steerHandler, boost::ref(*this), boost::ref(listenerManager));
+	Cmd::MakeShared(&SwerveDrive::steerHandler, boost::ref(*this));
 }
 
 SwerveDrive::~SwerveDrive()
@@ -56,19 +67,21 @@ SwerveDrive::~SwerveDrive()
 
 }
 
-void SwerveDrive::steerHandler(ListenerManager & listenerManager)
+void SwerveDrive::steerHandler()
 {
     double thresh = 0.2;
 
-    double x1 = std::abs(listenerManager.getRawDouble(Listenable::JOY1X)) > thresh ? listenerManager.getRawDouble(Listenable::JOY1X) : 0.0;
-    double y1 = std::abs(listenerManager.getRawDouble(Listenable::JOY1Y)) > thresh ? -listenerManager.getRawDouble(Listenable::JOY1Y) : 0.0;
-    double x2 = std::abs(listenerManager.getRawDouble(Listenable::JOY2X)) > thresh ? listenerManager.getRawDouble(Listenable::JOY2X) : 0.0;
+    double x1 = std::abs(_listenerManager.getRawDouble(Listenable::JOY1X)) > thresh ? _listenerManager.getRawDouble(Listenable::JOY1X) : 0.0;
+    double y1 = std::abs(_listenerManager.getRawDouble(Listenable::JOY1Y)) > thresh ? -_listenerManager.getRawDouble(Listenable::JOY1Y) : 0.0;
+    double x2 = std::abs(_listenerManager.getRawDouble(Listenable::JOY2X)) > thresh ? _listenerManager.getRawDouble(Listenable::JOY2X) : 0.0;
 
     vel = -(sqrt(pow(x1, 2) + pow(y1, 2)));
     rot = x2;
 
     if (std::abs(vel) > 0.1)
-        theta = RobotMath::rTD(atan2(y1, x1)) + _gyr->getAngle();
+    {
+        theta = RobotMath::rTD(atan2(y1, x1)) + _gyr->GetAngle();
+    }
     else
         vel = 0;
 
@@ -79,16 +92,10 @@ void SwerveDrive::steerHandler(ListenerManager & listenerManager)
     angL = RobotMath::rTD(atan2(yVel + (rot * xPosL), xVel - (rot * yPosL)));
 
     spdB = sqrt(pow(xVel + (rot * yPosB), 2) + pow(yVel - (rot * xPosB), 2));
-    angB = 180.0 / M_PI * (atan2(yVel + (rot * xPosB), xVel - (rot * yPosB)));
+    angB = RobotMath::rTD(atan2(yVel + (rot * xPosB), xVel - (rot * yPosB)));
 
     spdR = sqrt(pow(xVel + (rot * yPosR), 2) + pow(yVel - (rot * xPosR), 2));
-    angR = 180.0 / M_PI * (atan2(yVel + (rot * xPosR), xVel - (rot * yPosR)));
-
-    //DebugLog.log(DebugLog.LVL_STREAM, this, "Theta: " + theta);
-    //DebugLog.log(DebugLog.LVL_STREAM, this, "r: " + angR);
-    //DebugLog.log(DebugLog.LVL_STREAM, this, "l: " + angL);
-    //DebugLog.log(DebugLog.LVL_STREAM, this, "b: " + angB);
-    //DebugLog.log(DebugLog.LVL_STREAM, this, "rot: " + rot);
+    angR = RobotMath::rTD(atan2(yVel + (rot * xPosR), xVel - (rot * yPosR)));
 
     std::pair<double, double> r = optimizeSwerve(_rotFR->getEncoderAngle(), angR, spdR);
     std::pair<double, double> l = optimizeSwerve(_rotFL->getEncoderAngle(), angL, spdL);

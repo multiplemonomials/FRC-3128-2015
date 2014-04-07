@@ -39,7 +39,7 @@ void ListenerManager::addListener(Listenable key, ListenerMapType::mapped_type l
 bool ListenerManager::getRawBool(Listenable listenable)
 {
 	//check that this listenable is one of the boolean valued ones
-	if(listenable >= Listenable::A && listenable <= Listenable::R3)
+	if(listenable >= Listenable::ADOWN && listenable <= Listenable::R3DOWN)
 	{
 		boost::unique_lock<boost::mutex>(_mutex);
 		try
@@ -49,13 +49,15 @@ bool ListenerManager::getRawBool(Listenable listenable)
 		catch(std::out_of_range & error)
 		{
 			LOG_RECOVERABLE("Attempt to read data from ListenerManager whose thread has not finished starting")
-
-			return false;
 		}
+
+		return false;
 	}
 	else
 	{
 		THROW_EXCEPTION("Attempt to get boolean value of control listenable " << listenable << " which is not a boolean");
+
+		return false;
 	}
 }
 
@@ -79,6 +81,7 @@ double ListenerManager::getRawDouble(Listenable listenable)
 	else
 	{
 		THROW_EXCEPTION("Attempt to get double value of control listenable " << listenable << " which is not a double");
+		return 0.0;
 	}
 }
 
@@ -90,7 +93,7 @@ std::pair<std::vector<bool>, std::vector<double>> ListenerManager::pollControls(
 	boost::unique_lock<boost::mutex>(_mutex);
 
 	//read button values
-	for(int counter = Listenable::A; counter <= Listenable::R3 ; counter++)
+	for(int counter = Listenable::ADOWN; counter <= Listenable::R3DOWN ; counter++)
 	{
 		buttonValues[counter] = _joystick->GetRawButton(counter);
 	}
@@ -98,7 +101,7 @@ std::pair<std::vector<bool>, std::vector<double>> ListenerManager::pollControls(
 	//read joystick values
 	for(int counter = Listenable::JOY1X; counter <= Listenable::JOY2Y; counter++)
 	{
-		joystickValues[counter] = _joystick->GetRawAxis(counter);
+		joystickValues[counter] = _joystick->GetRawAxis(counter - 10);
 	}
 
 	return std::make_pair(buttonValues, joystickValues);
@@ -120,13 +123,30 @@ void ListenerManager::operator()()
 			std::unordered_set<ListenerMapType::mapped_type> listenersToInvoke;
 
 			//loop through button values
-			for(int counter = Listenable::A; counter <= Listenable::R3 ; counter++)
+			for(int counter = Listenable::ADOWN; counter <= Listenable::R3DOWN ; counter++)
 			{
-				//has this particular value changed?
-				if(_buttonValues[counter] != newValues.first[counter])
+				//has this button been pressed?
+				if((!_buttonValues[counter]) && (newValues.first[counter]))
 				{
 					//get all its registered listeners
 					std::pair<ListenerMapType::const_iterator, ListenerMapType::const_iterator> found_listeners = _listeners.equal_range((Listenable)(counter));
+
+					if(found_listeners.first != found_listeners.second)
+					{
+						//loop through them
+						for(ListenerMapType::const_iterator iterator = found_listeners.first; iterator != found_listeners.second; iterator++)
+						{
+							listenersToInvoke.insert((*iterator).second);
+						}
+					}
+
+				}
+				//has this button just stopped being pressed?
+				if((!_buttonValues[counter]) && (newValues.first[counter]))
+				{
+					//get all its registered listeners
+					//increment counter by 20 to get button up listeners
+					std::pair<ListenerMapType::const_iterator, ListenerMapType::const_iterator> found_listeners = _listeners.equal_range((Listenable)(counter + 20));
 
 					if(found_listeners.first != found_listeners.second)
 					{
@@ -174,7 +194,7 @@ void ListenerManager::operator()()
 			{
 				try
 				{
-					(*listener)(*this);
+					(*listener)();
 				}
 				catch(RoboException & error)
 				{

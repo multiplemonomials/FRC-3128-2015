@@ -28,9 +28,9 @@ _kP(kP)
 	}
 }
 
-void LinearAngleTarget::setControlTarget(double val)
+void LinearAngleTarget::setControlTargetImpl(double & val)
 {
-	_targetAngle = (val % 180 == 0 ? _targetAngle : val);
+	_targetAngle = (fmod(val, 180.0) == 0 ? _targetAngle : val);
 }
 
 double LinearAngleTarget::speedControlStep(Time::Duration dt)
@@ -44,7 +44,7 @@ double LinearAngleTarget::speedControlStep(Time::Duration dt)
 	return pGain;
 }
 
-void LinearAngleTarget::clearControlRun() {}
+void LinearAngleTarget::clearControlRunImpl() {}
 
 bool LinearAngleTarget::isComplete()
 {

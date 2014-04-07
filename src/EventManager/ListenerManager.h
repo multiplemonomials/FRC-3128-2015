@@ -20,9 +20,8 @@
 //to be the wpilib metaphor for an entire controller.
 //It polls the controller at a set interval, and invokes listeners
 //whenever a value they're set for has changed.  Listeners are run on
-//the object's polling thread, and must take a ListenerManager &
-//as an argument, which they can use to get the data they require
-//(which is cached in the object).
+//the object's polling thread, and will need to be passed a reference
+//to the listener manager somehow if the need control data
 //You may register the same (shared ptr to a) listener as many
 //times as you like, and each handler will only be invoked
 //once per polling cycle.
@@ -30,26 +29,41 @@
 //Enum which represents everything that can be read from the controller
 enum Listenable
 {
-	A = 1,
-	B = 2,
-	X = 3,
-	Y = 4,
-	LB = 5,
-	RB = 6,
-	BACK = 7,
-	START = 8,
-	L3 = 9,
-	R3 = 10,
+	ADOWN = 1,
+	BDOWN = 2,
+	XDOWN = 3,
+	YDOWN = 4,
+	LBDOWN = 5,
+	RBDOWN = 6,
+	BACKDOWN = 7,
+	STARTDOWN = 8,
+	L3DOWN = 9,
+	R3DOWN = 10,
 	JOY1X = 11,
 	JOY2X = 12,
 	TRIGGERS = 13,
 	JOY1Y = 14,
-	JOY2Y = 15
+	JOY2Y = 15,
+	AUP = 21,
+	BUP = 22,
+	XUP = 23,
+	YUP = 24,
+	LBUP = 25,
+	RBUP = 26,
+	BACKUP = 27,
+	STARTUP = 28,
+	L3UP = 29,
+	R3UP = 30,
 };
 
 class ListenerManager
 {
-	typedef std::unordered_multimap<Listenable, std::shared_ptr<boost::function<void(ListenerManager &)>>, std::hash<int>> ListenerMapType;
+public:
+
+	typedef std::shared_ptr<boost::function<void()>> listenerFunctionType;
+
+private:
+	typedef std::unordered_multimap<Listenable, listenerFunctionType, std::hash<int>> ListenerMapType;
 
 	//maps the listeners to the control inputs
 	ListenerMapType _listeners;

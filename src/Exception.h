@@ -2,6 +2,7 @@
 #define EXCEPTION_H_
 
 #include <boost/exception/all.hpp>
+#include <sstream>
 
 //NOTE: This file has been modified from a library written by Randall Smith
 
@@ -55,15 +56,17 @@ typedef boost::error_info<struct tag_error_code, int> ErrCode;
 
     Usage:
 
-        // Throws |Exception| object.
-        THROW_EXCEPTION(M2M_ERR_UNKNOWN_ERROR, "An unknown error occurred.);
+        // Throws |RoboException| object.
+        THROW_EXCEPTION("An unknown error occurred.);
 
-        // Throws my derivative of |Exception|.
-        THROW_MY_EXCEPTION(MyException(), M2M_ERR_UNKNOWN_ERROR, "An unknown error occurred.);
+        // Throws my derivative of |RoboException|.
+        THROW_MY_EXCEPTION(MyException() "An unknown error occurred.);
  ----------------------------------------------------------------------------*/
 
 #define THROW_EXCEPTION( __errorMessage) \
-    BOOST_THROW_EXCEPTION(RoboException() << ErrMsg(__errorMessage))
+	std::stringstream stringstream;		\
+	stringstream <<  __errorMessage;	\
+    BOOST_THROW_EXCEPTION(RoboException() << ErrMsg(stringstream.str()))
 
 #define THROW_CUSTOM_EXCEPTION(__exception, __errorMessage) \
     BOOST_THROW_EXCEPTION(__exception << ErrMsg(__errorMessage))
@@ -86,7 +89,7 @@ typedef boost::error_info<struct tag_error_code, int> ErrCode;
  ----------------------------------------------------------------------------*/
 
 #define ASSERT(__value) \
-    if (!(__value)) BOOST_THROW_EXCEPTION(Exception() << ErrMsg("Assertion failed."))
+    if (!(__value)) BOOST_THROW_EXCEPTION(RoboException() << ErrMsg("Assertion failed."))
 
 
 #endif /* EXCEPTION_H_ */

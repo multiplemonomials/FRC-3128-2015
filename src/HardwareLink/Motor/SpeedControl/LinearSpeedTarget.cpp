@@ -6,6 +6,7 @@
  */
 
 #include <HardwareLink/Motor/SpeedControl/LinearSpeedTarget.h>
+#include <RobotMovement/RobotMath.h>
 
 LinearSpeedTarget::LinearSpeedTarget(double tgtSpeed, double refreshTime)
 :_tgtSpeed(tgtSpeed),
@@ -27,7 +28,7 @@ LinearSpeedTarget::~LinearSpeedTarget()
 
 }
 
-void LinearSpeedTarget::setControlTarget(double d)
+void LinearSpeedTarget::setControlTargetImpl(double & d)
 {
 	_tgtSpeed = d;
 	_lastEncoderAngle = getLinkedEncoderAngle();
@@ -35,7 +36,7 @@ void LinearSpeedTarget::setControlTarget(double d)
 
 double LinearSpeedTarget::speedControlStep(Time::Duration dt)
 {
-	_dtAccum += dt;
+	_dtAccum += dt.total_milliseconds();
 
 	if(_dtAccum < _refreshTime)
 	{
@@ -55,7 +56,7 @@ void LinearSpeedTarget::setRefreshTime(double refreshTime)
 	_refreshTime = refreshTime/1000.0;
 }
 
-void LinearSpeedTarget::clearControlRun()
+void LinearSpeedTarget::clearControlRunImpl()
 {
 	_tgtSpeed = 0; _lastEncoderAngle = getLinkedEncoderAngle();
 }

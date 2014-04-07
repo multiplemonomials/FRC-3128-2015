@@ -10,7 +10,7 @@
 
 #include <HardwareLink/Motor/MotorControl.h>
 
-class LinearAngleTarget : MotorControl
+class LinearAngleTarget : public MotorControl
 {
 	double _minSpeed;
 
@@ -20,17 +20,17 @@ class LinearAngleTarget : MotorControl
 
 	double _kP;
 
+	virtual void setControlTargetImpl(double & val);
+
+	virtual double speedControlStep(Time::Duration dt);
+
 public:
+
+	virtual void clearControlRunImpl();
 
 	LinearAngleTarget(double minSpeed, double threshold, double kP);
 
-	void setControlTarget(double val);
-
-	double speedControlStep(Time::Duration dt);
-
-	void clearControlRun();
-
-	bool isComplete();
+	virtual bool isComplete();
 
 	virtual ~LinearAngleTarget();
 };

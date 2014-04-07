@@ -35,7 +35,7 @@ public:
 
 	AnalogChannel(uint8_t moduleNumber, uint32_t channel);
 	explicit AnalogChannel(uint32_t channel);
-	virtual ~AnalogChannel();
+	virtual ~AnalogChannel(){};
 
 	AnalogModule *GetModule();
 

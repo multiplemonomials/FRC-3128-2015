@@ -12,6 +12,7 @@
 
 #include <Util/Time.h>
 #include "MotorLink.h"
+#include <EventManager/CmdTimerPosix.h>
 
 
 /*
@@ -20,11 +21,11 @@
  */
 class MotorControl
 {
-private:
+protected:
 
-    volatile Time::Timepoint _lastRuntime;
+    Time::Timepoint _lastRuntime;
 
-    volatile MotorLink * _controlledMotor;
+    MotorLink * _controlledMotor;
 
     boost::mutex _mutex;
 
@@ -39,8 +40,12 @@ public:
 	_mutex(),
 	_speedSetScheduler(Cmd::MakeShared(&MotorControl::execute, boost::ref(*this)))
     {
-    	//TODO configuration setting
-    	_speedSetScheduler.StartRelative(Time::Milliseconds(100));
+
+    }
+
+    virtual ~MotorControl()
+    {
+
     }
 
     void setControlledMotor(MotorLink * m)
@@ -50,14 +55,18 @@ public:
     }
 
     //abstract functions that are implemented by its subclasses
-private:
+protected:
     //sets the target... parameter(it differs by base class) for the motor.
-    //It is called through one of the base class's functions so it can be mutexed
-    void setControlTargetImpl(double & val) = 0;
+    //following two are called through one of the base class's functions so they can be mutexed
+    virtual void setControlTargetImpl(double & val) = 0;
 public:
-    double speedControlStep(Time::Duration) = 0;
-    void clearControlRun() = 0;
-    bool isComplete() = 0;
+    virtual void clearControlRunImpl() = 0;
+
+protected:
+    virtual double speedControlStep(Time::Duration) = 0;
+
+public:
+    virtual bool isComplete() = 0;
 
     void setControlTarget(double & val)
     {
@@ -80,7 +89,7 @@ public:
      */
     Time::Duration getLastRuntimeDist()
     {
-    	return Time::Timepoint() - _lastRuntime;
+    	return Time::Timepoint(Time::GetLocalTime()) - _lastRuntime;
     }
 
     /**
@@ -109,23 +118,35 @@ public:
     	return _controlledMotor->getSpeed();
     }
 
+    void start()
+    {
+    	//TODO configuration setting
+    	_speedSetScheduler.StartRelative(Time::Milliseconds(100));
+    }
+
     void execute()
     {
         boost::unique_lock<boost::mutex>(_mutex);
 
         if(isComplete())
         {
-        	_controlledMotor->setInternalSpeed(0.0);
+        	_controlledMotor->setSpeed(0.0);
         }
         else
         {
-        	_controlledMotor->setInternalSpeed(speedControlStep(getLastRuntimeDist()));
+        	_controlledMotor->setSpeed(speedControlStep(getLastRuntimeDist()));
         }
 
-        _lastRuntime = Time::Timepoint();
+        _lastRuntime = Time::Timepoint(Time::GetLocalTime());
 
         //TODO configuration setting
         _speedSetScheduler.StartRelative(Time::Milliseconds(100));
+    }
+
+    virtual void clearControlRun()
+    {
+    	boost::unique_lock<boost::mutex>(_mutex);
+    	clearControlRunImpl();
     }
 };
 

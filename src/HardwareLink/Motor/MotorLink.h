@@ -35,9 +35,9 @@ class MotorLink
 
     std::shared_ptr<MotorControl> _spdControl;
 
-    bool _spdControlEnabled;
-    bool _motorReversed = false;
-    double _speedScalar = 1;
+    volatile bool _spdControlEnabled;
+    volatile bool _motorReversed = false;
+    volatile double _speedScalar = 1;
 
     CmdProcessor _cmdProcessor;
 
@@ -110,17 +110,7 @@ public:
 		_cmdProcessor.Enqueue(&MotorLink::setSpeedScalarImpl, boost::ref(*this), powScl);
 	}
 
-	void setSpeed(double pow)
-	{
-        if (_spdControlEnabled)
-        {
-            _spdControl->cancel();
-            _spdControlEnabled = false;
-            LOG_UNUSUAL("The motor power was set from outside the speed controller, so the controller was canceled.");
-        }
-
-		_cmdProcessor.Enqueue(&MotorLink::setSpeedImpl, boost::ref(*this), pow);
-	}
+	void setSpeed(double pow);
 
 	void setEncoder(std::shared_ptr<AbstractEncoder> enc)
 	{

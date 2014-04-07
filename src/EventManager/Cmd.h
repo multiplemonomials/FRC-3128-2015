@@ -113,6 +113,17 @@ struct Cmd
         return std::make_shared<Cmd::Functor>(boost::bind<void>(std::forward<BindArgs>(bindArgs)...));
 
     }
+
+    /*----------------------------------------------------------------------------
+        Helper function that creates a Cmd object on the heap and returns a shared_ptr
+        to it.  Recieves a lambda as a boost::function.
+     ----------------------------------------------------------------------------*/
+
+    SharedPtr static MakeSharedLambda(boost::function<void()> function)
+    {
+        return std::shared_ptr<decltype(function)>(&function);
+
+    }
 };
 
 

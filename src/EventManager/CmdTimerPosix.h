@@ -104,6 +104,9 @@ class CmdTimerPosix : public CmdTimer
         // Dtor.
         ~CmdTimerPosixImpl();
 
+        //check with the OS if the timer is running
+        bool TimerIsRunning();
+
         // Specify the Cmd to execute when the timer expires.
         void SetCmd(Cmd::SharedPtr cmdToInvoke);
 
@@ -170,6 +173,12 @@ public:
 
     // Assignment operator (assignable).
     CmdTimerPosix& operator=(const CmdTimerPosix&) = default;
+
+    //returns true if timer is running
+    bool TimerIsRunning()
+    {
+        return _pImpl->TimerIsRunning();
+    }
 
 
     // Specify the Cmd to execute when the timer expires.

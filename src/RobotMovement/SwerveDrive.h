@@ -9,6 +9,7 @@
 #define SWERVEDRIVE_H_
 
 #include <utility>
+#include <Gyro.h>
 
 #include <EventManager/CmdProcessor.h>
 #include <EventManager/ListenerManager.h>
@@ -23,7 +24,7 @@ class SwerveDrive
      double spdL, spdR, spdB;
      double angL, angR, angB;
 
-     std::shared_ptr<GyroLink> _gyr;
+     std::shared_ptr<Gyro> _gyr;
 
      std::shared_ptr<MotorLink> _rotFR;
 
@@ -37,20 +38,25 @@ class SwerveDrive
 
      std::shared_ptr<MotorLink> _drvBk;
 
+     ListenerManager & _listenerManager;
+
      //serializes calls to steer() and runs them off the calling thread
      CmdProcessor _cmdProcessor;
 
      //function that does the actual steering
-     void steerHandler(ListenerManager & listenerManager);
+     void steerHandler();
 
 public:
 
     static std::pair<double, double> optimizeSwerve(double ang1, double ang2, double vel);
 
     //queues a steer operation
-    void steer(ListenerManager & listnenerManager);
+    void steer();
 
-	SwerveDrive();
+	SwerveDrive(std::shared_ptr<Gyro> _gyr, std::shared_ptr<MotorLink> _rotFR,
+			std::shared_ptr<MotorLink> _rotFL, std::shared_ptr<MotorLink> _rotBk,
+			std::shared_ptr<MotorLink> _drvFR, std::shared_ptr<MotorLink> _drvFL,
+			std::shared_ptr<MotorLink> drvBk, ListenerManager & listenerManager);
 
 	virtual ~SwerveDrive();
 };

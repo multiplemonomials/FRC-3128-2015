@@ -15,7 +15,7 @@
  * as opposed to targeting a certain angle
  *
  */
-class LinearSpeedTarget : MotorControl
+class LinearSpeedTarget : public MotorControl
 {
 	double _tgtSpeed;
 
@@ -24,6 +24,10 @@ class LinearSpeedTarget : MotorControl
     double _refreshTime;
 
     double _lastEncoderAngle;
+
+	void setControlTargetImpl(double & d);
+
+	double speedControlStep(Time::Duration dt);
 
 public:
 
@@ -42,16 +46,16 @@ public:
 
 	virtual ~LinearSpeedTarget();
 
-	void setControlTarget(double d);
-
-	double speedControlStep(Time::Duration dt);
-
 	/**
 	 * Sets the speed update time in msec
 	 *
 	 * refreshTime speed update rate in msec
 	 */
 	void setRefreshTime(double refreshTime);
+
+	bool isComplete();
+
+	void clearControlRunImpl();
 };
 
 #endif /* LINEARSPEEDTARGET_H_ */

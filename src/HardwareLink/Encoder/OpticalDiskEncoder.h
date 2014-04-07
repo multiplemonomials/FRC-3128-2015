@@ -8,7 +8,12 @@
 #ifndef OPTICALDISKENCODER_H_
 #define OPTICALDISKENCODER_H_
 
-class OpticalDiskEncoder
+#include <memory>
+#include <Encoder.h>
+
+#include "AbstractEncoder.h"
+
+class OpticalDiskEncoder : public AbstractEncoder
 {
 	std::shared_ptr<Encoder> _enc;
 

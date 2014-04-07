@@ -1,12 +1,12 @@
 /*
- * JamiesPrettyFormatter.h
+ * CondensedFormatter.h
  *
  *  Created on: Jan 3, 2014
  *      Author: jamie
  */
 
-#ifndef JAMIESPRETTYFORMATTER_H_
-#define JAMIESPRETTYFORMATTER_H_
+#ifndef CONDENSEDFORMATTER_H_
+#define CONDENSEDFORMATTER_H_
 
 #include <memory>
 #include <sstream>
@@ -14,7 +14,7 @@
 
 #include <LogMessage.h>
 
-struct JamiesPrettyFormatter
+struct CondensedFormatter
 {
 	std::string operator()(std::shared_ptr<LogMessage> messagePtr)
 	{
@@ -30,4 +30,4 @@ struct JamiesPrettyFormatter
 	}
 };
 
-#endif /* JAMIESPRETTYFORMATTER_H_ */
+#endif /* CONDENSEDFORMATTER_H_ */
