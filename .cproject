@@ -30,6 +30,7 @@
 								<option id="gnu.cpp.compiler.option.other.other.729284227" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-Wno-unused-local-typedefs -c -fmessage-length=0 --std=gnu++11" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.include.paths.1526212791" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/usr/include/boost_1_54_0"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/wpilib/vxworks}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/libeurointroduction}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/wpilib}&quot;"/>

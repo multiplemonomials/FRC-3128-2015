@@ -17,7 +17,8 @@
  * Stores most recent status information as well as containing utility functions for checking
  * channels and error processing.
  */
-class SensorBase: public ErrorBase {
+class SensorBase//: public ErrorBase
+{
 public:
 	SensorBase();
 	virtual ~SensorBase(){};
@@ -52,7 +53,7 @@ protected:
 private:
 	DISALLOW_COPY_AND_ASSIGN(SensorBase);
 	static SensorBase *m_singletonList;
-	SensorBase *m_nextSingleton;
+	//SensorBase *m_nextSingleton;
 };
 
 

@@ -23,7 +23,8 @@ class DigitalModule;
  * variable speed.  It also allows the two channels (forward and reverse) to be used independently
  * for something that does not care about voltage polatiry (like a solenoid).
  */
-class Relay : public SensorBase, public ITableListener, public LiveWindowSendable {
+class Relay //: public SensorBase, public ITableListener, public LiveWindowSendable
+{
 public:
 	typedef enum {kOff, kOn, kForward, kReverse} Value;
 	typedef enum {kBothDirections, kForwardOnly, kReverseOnly} Direction;

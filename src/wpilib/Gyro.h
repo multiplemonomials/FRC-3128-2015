@@ -24,7 +24,7 @@ class AnalogModule;
  * with a channel that is assigned one of the Analog accumulators from the FPGA. See
  * AnalogChannel for the current accumulator assignments.
  */
-class Gyro : public SensorBase, public PIDSource, public LiveWindowSendable
+class Gyro// : public SensorBase, public PIDSource, public LiveWindowSendable
 {
 public:
 	static const uint32_t kOversampleBits = 10;
@@ -42,7 +42,7 @@ public:
 	virtual float GetAngle();
 	virtual double GetRate();
 	void SetSensitivity(float voltsPerDegreePerSecond);
-	void SetPIDSourceParameter(PIDSourceParameter pidSource);
+	void SetPIDSourceParameter(PIDSource::PIDSourceParameter pidSource);
 	virtual void Reset();
 
 	// PIDSource interface
@@ -63,7 +63,7 @@ private:
 	float m_offset;
 	bool m_channelAllocated;
 	uint32_t m_center;
-	PIDSourceParameter m_pidSource;
+	PIDSource::PIDSourceParameter m_pidSource;
 	
 	ITable *m_table;
 };

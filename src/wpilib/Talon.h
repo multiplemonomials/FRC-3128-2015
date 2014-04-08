@@ -14,7 +14,7 @@
 /**
  * CTRE Talon Speed Controller
  */
-class Talon : public SafePWM, public SpeedController
+class Talon// : public SafePWM, public SpeedController
 {
 public:
 	explicit Talon(uint32_t channel);
@@ -22,7 +22,7 @@ public:
 	virtual ~Talon();
 	virtual void Set(float value, uint8_t syncGroup=0);
 	virtual float Get();
-	virtual void Disable();
+	//virtual void Disable();
 
 	virtual void PIDWrite(float output);
 

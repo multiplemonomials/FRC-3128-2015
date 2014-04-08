@@ -19,7 +19,8 @@ class DigitalModule;
  * allocate digital inputs and outputs as required. This class is only for devices like switches
  * etc. that aren't implemented anywhere else.
  */
-class DigitalInput : public DigitalSource, public LiveWindowSendable {
+class DigitalInput// : public DigitalSource, public LiveWindowSendable
+{
 public:
 	explicit DigitalInput(uint32_t channel);
 	DigitalInput(uint8_t moduleNumber, uint32_t channel);
@@ -28,13 +29,13 @@ public:
 	uint32_t GetChannel();
 
 	// Digital Source Interface
-	virtual uint32_t GetChannelForRouting();
-	virtual uint32_t GetModuleForRouting();
-	virtual bool GetAnalogTriggerForRouting();
+	//virtual uint32_t GetChannelForRouting();
+	//virtual uint32_t GetModuleForRouting();
+	//virtual bool GetAnalogTriggerForRouting();
 	
 	// Interruptable Interface
-	virtual void RequestInterrupts(tInterruptHandler handler, void *param=NULL); ///< Asynchronus handler version.
-	virtual void RequestInterrupts();		///< Synchronus Wait version.
+	//virtual void RequestInterrupts(nFPGA::tInterruptHandler handler, void *param=NULL); ///< Asynchronus handler version.
+	//virtual void RequestInterrupts();		///< Synchronus Wait version.
 	void SetUpSourceEdge(bool risingEdge, bool fallingEdge);
 
 	void UpdateTable();

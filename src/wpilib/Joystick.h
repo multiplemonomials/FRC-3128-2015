@@ -18,7 +18,7 @@ class DriverStation;
  * the most recent value is returned. There is a single class instance for each joystick and the mapping
  * of ports to hardware buttons depends on the code in the driver station.
  */
-class Joystick : public GenericHID, public ErrorBase
+class Joystick// : public GenericHID, public ErrorBase
 {
 public:
 	static const uint32_t kDefaultXAxis = 1;
@@ -44,24 +44,24 @@ public:
 	uint32_t GetAxisChannel(AxisType axis);
 	void SetAxisChannel(AxisType axis, uint32_t channel); 
 
-	virtual float GetX(JoystickHand hand = kRightHand);
-	virtual float GetY(JoystickHand hand = kRightHand);
-	virtual float GetZ();
-	virtual float GetTwist();
-	virtual float GetThrottle();
-	virtual float GetAxis(AxisType axis);
+	//virtual float GetX(GenericHID::JoystickHand hand = GenericHID::JoystickHand::kRightHand);
+	//virtual float GetY(GenericHID::JoystickHand hand = GenericHID::JoystickHand::kRightHand);
+	//virtual float GetZ();
+	//virtual float GetTwist();
+	//virtual float GetThrottle();
+	//virtual float GetAxis(AxisType axis);
 	float GetRawAxis(uint32_t axis);
 
-	virtual bool GetTrigger(JoystickHand hand = kRightHand);
-	virtual bool GetTop(JoystickHand hand = kRightHand);
-	virtual bool GetBumper(JoystickHand hand = kRightHand);
-	virtual bool GetButton(ButtonType button);
+	//virtual bool GetTrigger(GenericHID::JoystickHand hand = GenericHID::JoystickHand::kRightHand);
+	//virtual bool GetTop(GenericHID::JoystickHand hand = GenericHID::JoystickHand::kRightHand);
+	///virtual bool GetBumper(GenericHID::JoystickHand hand = GenericHID::JoystickHand::kRightHand);
+	//virtual bool GetButton(ButtonType button);
 	bool GetRawButton(uint32_t button);
 	static Joystick* GetStickForPort(uint32_t port);
 	
-	virtual float GetMagnitude();
-	virtual float GetDirectionRadians();
-	virtual float GetDirectionDegrees();
+	//virtual float GetMagnitude();
+	//virtual float GetDirectionRadians();
+	//virtual float GetDirectionDegrees();
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(Joystick);

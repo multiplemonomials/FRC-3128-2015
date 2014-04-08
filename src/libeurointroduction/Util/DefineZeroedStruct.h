@@ -8,6 +8,8 @@
 #ifndef DEFINEZEROEDSTRUCT_H_
 #define DEFINEZEROEDSTRUCT_H_
 
+#include <string.h>
+
 /*-----------------------------------------------------------------------------
    Macro that conveniently defines, then zeroes out, a (normally) struct
    of the specified type and name.  Eliminates problems with calls to

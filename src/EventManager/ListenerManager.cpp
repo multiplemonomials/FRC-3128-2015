@@ -16,8 +16,8 @@
 ListenerManager::ListenerManager(std::shared_ptr<Joystick> joystick)
 :_listeners(),
  _joystick(joystick),
- _joystickValues(),
- _buttonValues(),
+ _joystickValues(16),
+ _buttonValues(11),
  _mutex(),
  _thread(boost::ref(*this))
 {
@@ -34,6 +34,18 @@ void ListenerManager::addListener(Listenable key, ListenerMapType::mapped_type l
 {
 	boost::unique_lock<boost::mutex>(_mutex);
 	_listeners.insert(std::make_pair(key, listener));
+}
+
+void ListenerManager::removeAllListeners()
+{
+	boost::unique_lock<boost::mutex>(_mutex);
+	_listeners.clear();
+}
+
+void ListenerManager::removeAllListenersForControl(Listenable listener)
+{
+	boost::unique_lock<boost::mutex>(_mutex);
+	_listeners.erase(listener);
 }
 
 bool ListenerManager::getRawBool(Listenable listenable)
@@ -87,8 +99,8 @@ double ListenerManager::getRawDouble(Listenable listenable)
 
 std::pair<std::vector<bool>, std::vector<double>> ListenerManager::pollControls()
 {
-	std::vector<bool> buttonValues;
-	std::vector<double> joystickValues;
+	std::vector<bool> buttonValues(11);
+	std::vector<double> joystickValues(16);
 
 	boost::unique_lock<boost::mutex>(_mutex);
 
@@ -113,6 +125,7 @@ void ListenerManager::operator()()
 
 	while(true)
 	{
+		{
 		FUNC_TIMER;
 
 		auto newValues = pollControls();
@@ -205,6 +218,7 @@ void ListenerManager::operator()()
 					LOG_RECOVERABLE("Caught... something from a control listener")
 				}
 			}
+		}
 		}
 
 		try

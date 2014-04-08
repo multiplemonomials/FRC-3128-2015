@@ -15,7 +15,7 @@ class InterruptableSensorBase : public SensorBase
 public:
 	InterruptableSensorBase();
 	virtual ~InterruptableSensorBase();
-	virtual void RequestInterrupts(tInterruptHandler handler, void *param) = 0; ///< Asynchronus handler version.
+	virtual void RequestInterrupts(nFPGA::tInterruptHandler handler, void *param) = 0; ///< Asynchronus handler version.
 	virtual void RequestInterrupts() = 0;		///< Synchronus Wait version.
 	virtual void CancelInterrupts();			///< Free up the underlying chipobject functions.
 	virtual void WaitForInterrupt(float timeout); ///< Synchronus version.
@@ -24,7 +24,7 @@ public:
 	virtual double ReadInterruptTimestamp();		///< Return the timestamp for the interrupt that occurred.
 protected:
 	tInterrupt *m_interrupt;
-	tInterruptManager *m_manager;
+	nFPGA::tInterruptManager *m_manager;
 	uint32_t m_interruptIndex;
 	void AllocateInterrupts(bool watcher);
 };

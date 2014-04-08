@@ -26,7 +26,7 @@ class AnalogModule;
  * resolution, while the averaged samples are divided by the number of samples to retain the resolution,
  * but get more stable values.
  */
-class AnalogChannel : public SensorBase, public PIDSource, public LiveWindowSendable
+class AnalogChannel //: public SensorBase, public PIDSource, public LiveWindowSendable
 {
 public:
 	static const uint8_t kAccumulatorModuleNumber = 1;
@@ -35,7 +35,6 @@ public:
 
 	AnalogChannel(uint8_t moduleNumber, uint32_t channel);
 	explicit AnalogChannel(uint32_t channel);
-	virtual ~AnalogChannel(){};
 
 	AnalogModule *GetModule();
 

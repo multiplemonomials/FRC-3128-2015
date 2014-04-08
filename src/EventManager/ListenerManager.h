@@ -101,7 +101,10 @@ public:
 	void addListener(Listenable key, ListenerMapType::mapped_type listener);
 
 	//remove all listeners set for the given listener
-	void removeAllListeners(Listenable listener);
+	void removeAllListenersForControl(Listenable listener);
+
+	//remove all listeners, period
+	void removeAllListeners();
 
 	//returns the boolean value of a button listenable (between A and R3).
 	//Does bounds checking, throws if value is out of range.

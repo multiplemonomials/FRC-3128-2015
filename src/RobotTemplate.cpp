@@ -1,9 +1,9 @@
 //============================================================================
-// Name        : FRC-3128-2015.cpp
+// Name        : RobotTemplate.cpp
 // Author      : FRC Team 3128
 // Version     :
 // Copyright   : 
-// Description : Hello World in C++, Ansi-style
+// Description :
 //============================================================================
 
 #include <iostream>
@@ -16,7 +16,7 @@
 #include <LogMacros.h>
 #include "Global.h"
 
-struct RobotTemplate : public IterativeRobot
+struct RobotTemplate// : public IterativeRobot
 {
 	bool autonomousHasBeenInit = false;
 	bool teleopHasBeenInit = false;
@@ -38,8 +38,7 @@ struct RobotTemplate : public IterativeRobot
     {
         if(!autonomousHasBeenInit)
         {
-            //TODO EventManager.dropAllEvents();
-            //TODO ListenerManager.dropAllListeners();
+            _global._listenerManager.removeAllListeners();
         	_global.initializeAuto();
             autonomousHasBeenInit = true;
             teleopHasBeenInit = false;
@@ -50,9 +49,7 @@ struct RobotTemplate : public IterativeRobot
     {
         if(!teleopHasBeenInit)
         {
-            //TODO EventSequencer.stopAllSequencers();
-            //TODO EventManager.dropAllEvents();
-            //TODO ListenerManager.dropAllListeners();
+        	_global._listenerManager.removeAllListeners();
         	_global.initializeTeleop();
             teleopHasBeenInit = true;
             autonomousHasBeenInit = false;
@@ -61,19 +58,18 @@ struct RobotTemplate : public IterativeRobot
 
     void DisabledPeriodic()
     {
-        GetWatchdog().Feed();
-        // TODO if(Constants.EVENT_PROCESS_WHILE_DISABLED) EventManager.processEvents();
+        //GetWatchdog().Feed();
     }
 
     void AutonomousPeriodic()
     {
-    	GetWatchdog().Feed();
+    	//GetWatchdog().Feed();
         boost::this_thread::sleep(boost::posix_time::milliseconds(150));
     }
 
     void TeleopPeriodic()
     {
-    	GetWatchdog().Feed();
+    	//GetWatchdog().Feed();
         boost::this_thread::sleep(boost::posix_time::milliseconds(150));
     }
 
@@ -83,7 +79,23 @@ struct RobotTemplate : public IterativeRobot
 int main()
 {
 
-	std::cout << "!!!Hello World!!!" << std::endl; // prints !!!Hello World!!!
+	RobotTemplate robotTemplate;
+
+	robotTemplate.RobotInit();
+
+	std::cout << "*** Main: Autonomous Running..." << std::endl;
+	robotTemplate.AutonomousInit();
+	robotTemplate.AutonomousPeriodic();
+	std::cin.get();
+
+	std::cout << "*** Main: Disabled Running..." << std::endl;
+	robotTemplate.DisabledInit();
+	robotTemplate.DisabledPeriodic();
+
+	std::cout << "*** Main: Teleop Running..." << std::endl;
+	robotTemplate.TeleopInit();
+	robotTemplate.TeleopPeriodic();
+	std::cin.get();
 
 	return 0;
 }
