@@ -73,9 +73,9 @@ public:
     }
 
     // Builds a Cmd with the specified ctor arguments, then puts it on the processing queue.
-    void EnqueueLambda(Cmd::Functor function)
+    void EnqueueLambda(Cmd::Functor * function)
     {
-        _queue.Enqueue(std::shared_ptr<Cmd::Functor>(&function));
+        _queue.Enqueue(std::shared_ptr<Cmd::Functor>(function));
     }
 
 

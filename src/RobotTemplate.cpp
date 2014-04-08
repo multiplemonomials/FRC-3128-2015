@@ -11,10 +11,15 @@
 #include <memory>
 #include <boost/thread.hpp>
 #include <boost/date_time.hpp>
-
 #include <wpilib/WPILib.h>
+
 #include <LogMacros.h>
 #include "Global.h"
+#include <EzLogger/LogCore.h>
+#include <EzLogger/output/acceptors/BasicAcceptor.h>
+#include <EzLogger/output/formatters/CondensedFormatter.h>
+#include <EzLogger/output/writers/BasicWriter.h>
+#include <EzLogger/output/LogOutput.h>
 
 struct RobotTemplate// : public IterativeRobot
 {
@@ -78,6 +83,8 @@ struct RobotTemplate// : public IterativeRobot
 
 int main()
 {
+
+	LogCore::instance().addOutput("stdout", std::make_shared<LogOutput<BasicAcceptor, CondensedFormatter, BasicWriter>>());
 
 	RobotTemplate robotTemplate;
 

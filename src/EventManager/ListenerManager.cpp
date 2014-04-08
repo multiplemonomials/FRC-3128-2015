@@ -125,8 +125,6 @@ void ListenerManager::operator()()
 
 	while(true)
 	{
-		{
-		FUNC_TIMER;
 
 		auto newValues = pollControls();
 
@@ -218,7 +216,6 @@ void ListenerManager::operator()()
 					LOG_RECOVERABLE("Caught... something from a control listener")
 				}
 			}
-		}
 		}
 
 		try

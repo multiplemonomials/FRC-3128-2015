@@ -22,15 +22,15 @@ _shooterTSensor(std::make_shared<DigitalInput>(1, 4)),
 _encFR(std::make_shared<MagneticPotEncoder>(-60, 1, 2)),
 _encFL(std::make_shared<MagneticPotEncoder>(17, 1, 3)),
 _encBk(std::make_shared<MagneticPotEncoder>(-35, 1, 4)),
-_rotFR(std::make_shared<MotorLink>(std::make_shared<Talon>(1, 8), _encFR, std::make_shared<LinearAngleTarget>(.40, 4, 0.005))), //OFFSET: -55 DEG
-_rotFL(std::make_shared<MotorLink>(std::make_shared<Talon>(1, 9), _encFL, std::make_shared<LinearAngleTarget>(.40, 4, 0.005))), //OFFSET: -18 DEG
-_rotBk(std::make_shared<MotorLink>(std::make_shared<Talon>(1, 7), _encBk, std::make_shared<LinearAngleTarget>(.40, 4, 0.005))), //OFFSET: -10 DEG
-_drvFR(std::make_shared<MotorLink>(std::make_shared<Talon>(1, 1))),
-_drvFL(std::make_shared<MotorLink>(std::make_shared<Talon>(1, 2))),
-_drvBk(std::make_shared<MotorLink>(std::make_shared<Talon>(1, 3))),
-_mShooter(std::make_shared<MotorLink>(std::make_shared<Talon>(1, 4))),
-_mArmRoll(std::make_shared<MotorLink>(std::make_shared<Talon>(1, 5))),
-_mArmMove(std::make_shared<MotorLink>(std::make_shared<Talon>(1, 6))),
+_rotFR(std::make_shared<MotorLink>("rotFr", std::make_shared<Talon>(1, 8), _encFR, std::make_shared<LinearAngleTarget>(.40, 4, 0.005))), //OFFSET: -55 DEG
+_rotFL(std::make_shared<MotorLink>("rotFL", std::make_shared<Talon>(1, 9), _encFL, std::make_shared<LinearAngleTarget>(.40, 4, 0.005))), //OFFSET: -18 DEG
+_rotBk(std::make_shared<MotorLink>("rotBk", std::make_shared<Talon>(1, 7), _encBk, std::make_shared<LinearAngleTarget>(.40, 4, 0.005))), //OFFSET: -10 DEG
+_drvFR(std::make_shared<MotorLink>("drvFr", std::make_shared<Talon>(1, 1))),
+_drvFL(std::make_shared<MotorLink>("drvFl", std::make_shared<Talon>(1, 2))),
+_drvBk(std::make_shared<MotorLink>("drvBk", std::make_shared<Talon>(1, 3))),
+_mShooter(std::make_shared<MotorLink>("mShooter", std::make_shared<Talon>(1, 4))),
+_mArmRoll(std::make_shared<MotorLink>("mArmRoll", std::make_shared<Talon>(1, 5))),
+_mArmMove(std::make_shared<MotorLink>("mArmMove", std::make_shared<Talon>(1, 6))),
 _cockShooter(std::make_shared<CockArm>(_shooterTSensor, _mShooter)),
 _redLights(std::make_shared<RelayLink>(std::make_shared<Relay>(1, 1))),
 _blueLights(std::make_shared<RelayLink>(std::make_shared<Relay>(1, 2))),
@@ -55,7 +55,8 @@ void Global::initializeRobot()
 	_rotFL->startSpeedControl(90);
 	_rotFR->startSpeedControl(90);
 
-	LogCore::instance().addOutput("stdout", std::make_shared<LogOutput<BasicAcceptor, CondensedFormatter, BasicWriter>>());
+	//Disabled for simulation builds, it needs to be done in main
+	//LogCore::instance().addOutput("stdout", std::make_shared<LogOutput<BasicAcceptor, CondensedFormatter, BasicWriter>>());
 }
 
 void Global::initializeDisabled()
@@ -71,9 +72,9 @@ void Global::initializeAuto()
 
 void Global::initializeTeleop()
 {
-    _rotBk->startSpeedControl(90);
-    _rotFL->startSpeedControl(90);
-    _rotFR->startSpeedControl(90);
+    //_rotBk->startSpeedControl(90);
+    //_rotFL->startSpeedControl(90);
+    //_rotFR->startSpeedControl(90);
 
     lightChange(_redLights, _blueLights);
 

@@ -18,13 +18,13 @@ void MotorLink::setControlTarget(double target)
 {
 	if (!_spdControl)
 	{
-		LOG_FATAL("The speed controller's target was set, but none exists.");
+		LOG_FATAL("The speed controller's target was set, but none exists for MotorLink " << _name << ".");
 		return;
 	}
 
 	if (!_spdControlEnabled)
 	{
-		LOG_RECOVERABLE("The speed controller's target was set, but it is not enabled.");
+		LOG_RECOVERABLE("The speed controller's target was set, but it is not enabled for MotorLink " << _name << ".");
 		return;
 	}
 
@@ -42,7 +42,7 @@ void MotorLink::setEncoderImpl(std::shared_ptr<AbstractEncoder> enc)
 {
 	if(_encoder)
 	{
-		LOG_RECOVERABLE("MotorLink: The encoder has been changed when one already existed.");
+		LOG_RECOVERABLE("MotorLink " << _name << ": The encoder has been changed when one already existed.");
 	}
 	_encoder = enc;
 }
@@ -73,7 +73,7 @@ void MotorLink::setSpeedControllerImpl(std::shared_ptr<MotorControl> spdControl)
 	{
 		_spdControlEnabled = false;
 		_spdControl->cancel();
-		LOG_RECOVERABLE("The speed controller was changed when one was running.");
+		LOG_RECOVERABLE("The speed controller was changed when one was running for MotorLink " << _name << ".");
 	}
 
 	_spdControl = spdControl;
@@ -92,8 +92,14 @@ void MotorLink::setSpeed(double pow)
     {
         _spdControl->cancel();
         _spdControlEnabled = false;
-        LOG_UNUSUAL("The motor power was set from outside the speed controller, so the controller was canceled.");
+        LOG_UNUSUAL("The motor power was set from outside the speed controller, so the controller was canceled on MotorLink " << _name << ".");
     }
 
 	_cmdProcessor.Enqueue(&MotorLink::setSpeedImpl, boost::ref(*this), pow);
 }
+
+void MotorLink::setSpeedForce(double pow)
+{
+	_cmdProcessor.Enqueue(&MotorLink::setSpeedImpl, boost::ref(*this), pow);
+}
+

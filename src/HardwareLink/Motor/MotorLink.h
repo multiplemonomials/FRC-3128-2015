@@ -39,6 +39,8 @@ class MotorLink
     volatile bool _motorReversed = false;
     volatile double _speedScalar = 1;
 
+    std::string _name;
+
     CmdProcessor _cmdProcessor;
 
 	void setSpeedImpl(double pow);
@@ -56,43 +58,44 @@ class MotorLink
 	void stopSpeedControlImpl();
 
 public:
-	MotorLink(std::shared_ptr<Talon> talon)
-	: MotorLink(talon, std::shared_ptr<AbstractEncoder>(), std::shared_ptr<MotorControl>(), 1)
+	MotorLink(std::string name, std::shared_ptr<Talon> talon)
+	: MotorLink(name, talon, std::shared_ptr<AbstractEncoder>(), std::shared_ptr<MotorControl>(), 1)
 	{
 
 	}
 
-	MotorLink(std::shared_ptr<Talon> talon, double powscl)
-	:MotorLink(talon, std::shared_ptr<AbstractEncoder>(), std::shared_ptr<MotorControl>(), powscl)
+	MotorLink(std::string name, std::shared_ptr<Talon> talon, double powscl)
+	:MotorLink(name, talon, std::shared_ptr<AbstractEncoder>(), std::shared_ptr<MotorControl>(), powscl)
 	{
 
 	}
 
-	MotorLink(std::shared_ptr<Talon> talon, std::shared_ptr<AbstractEncoder> enc)
-	:MotorLink(talon, enc, std::shared_ptr<MotorControl>(), 1)
+	MotorLink(std::string name, std::shared_ptr<Talon> talon, std::shared_ptr<AbstractEncoder> enc)
+	:MotorLink(name, talon, enc, std::shared_ptr<MotorControl>(), 1)
 	{
 
 	}
 
-	MotorLink(std::shared_ptr<Talon> talon, std::shared_ptr<AbstractEncoder> enc, double powscl)
-	:MotorLink(talon, enc, std::shared_ptr<MotorControl>(), 1)
+	MotorLink(std::string name, std::shared_ptr<Talon> talon, std::shared_ptr<AbstractEncoder> enc, double powscl)
+	:MotorLink(name, talon, enc, std::shared_ptr<MotorControl>(), 1)
 	{
 
 	}
 
-	MotorLink(std::shared_ptr<Talon> talon, std::shared_ptr<AbstractEncoder> enc, std::shared_ptr<MotorControl> spdControl)
-	:MotorLink(talon, enc, spdControl, 1)
+	MotorLink(std::string name, std::shared_ptr<Talon> talon, std::shared_ptr<AbstractEncoder> enc, std::shared_ptr<MotorControl> spdControl)
+	:MotorLink(name, talon, enc, spdControl, 1)
 	{
 
 	}
 
-	MotorLink(std::shared_ptr<Talon> talon, std::shared_ptr<AbstractEncoder> enc, std::shared_ptr<MotorControl> spdControl, double powscl)
+	MotorLink(std::string name, std::shared_ptr<Talon> talon, std::shared_ptr<AbstractEncoder> enc, std::shared_ptr<MotorControl> spdControl, double powscl)
 	:_talon(talon),
 	_encoder(enc),
 	_spdControl(spdControl),
 	_spdControlEnabled(false),
 	_motorReversed(false),
 	_speedScalar(powscl),
+	_name(name),
 	_cmdProcessor("MotorLinkCmdProcessor")
 	{
 
@@ -110,7 +113,11 @@ public:
 		_cmdProcessor.Enqueue(&MotorLink::setSpeedScalarImpl, boost::ref(*this), powScl);
 	}
 
+	//sets the motor speed, except if a speed controller is active
 	void setSpeed(double pow);
+
+	//sets the motor speed whether or not a speed controller is active
+	void setSpeedForce(double pow);
 
 	void setEncoder(std::shared_ptr<AbstractEncoder> enc)
 	{
