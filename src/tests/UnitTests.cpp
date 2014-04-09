@@ -1,12 +1,5 @@
 /*------------------------------------------------------------------------------
  UnitTests.cpp
-
- Top-level source file for the M2MSLAP unit tests.
-
- Copyright (c) 2013 Qualcomm, Inc. All rights reserved.
- Confidential and Proprietary.
- This software may be subject to U.S. and international export laws.
- Diversion contrary to U.S. and international laws is strictly prohibited.
  ------------------------------------------------------------------------------*/
 
 #define BOOST_TEST_DYN_LINK

@@ -209,7 +209,7 @@ void ListenerManager::operator()()
 				}
 				catch(RoboException & error)
 				{
-					LOG_RECOVERABLE("Caught a RoboException from a control listener: \n" << error.what());
+					LOG_RECOVERABLE("Caught a RoboException from a control listener: \n" << GET_ROBOEXCPTION_MESSAGE(error));
 				}
 				catch(...)
 				{

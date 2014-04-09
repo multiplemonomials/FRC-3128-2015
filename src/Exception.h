@@ -41,14 +41,19 @@ struct RoboException :
 
 typedef boost::error_info<struct tag_error_msg, std::string> ErrMsg;
 
-
 /*-----------------------------------------------------------------------------
-    Use to attach an error code to an exception.  E.g.:
+ *	Use to extract the message string from a RoboException
+ *
+ *	Usage:
+ *
+ *	catch(RoboException & error)
+ *  {
+ *  	BOOST_ERROR(GET_ROBOEXCPTION_MESSAGE(error));
+ *  }
+ *
+ *---------------------------------------------------------------------------*/
 
-        BOOST_THROW_EXCEPTION(Exception() << ErrCode(43));
- ----------------------------------------------------------------------------*/
-
-typedef boost::error_info<struct tag_error_code, int> ErrCode;
+#define GET_ROBOEXCPTION_MESSAGE(error) (*(boost::get_error_info<ErrMsg>(error)))
 
 
 /*-----------------------------------------------------------------------------

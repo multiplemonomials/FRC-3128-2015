@@ -58,7 +58,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src/tests/CmdTimerMultiplexTest.cpp|src/tests/CmdTimerTest.cpp|src/tests/UnitTests.cpp|src/tests/CmdProcessorTest.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/tests/ListenerManagerTest.cpp|src/tests/CmdTimerMultiplexTest.cpp|src/tests/CmdTimerTest.cpp|src/tests/UnitTests.cpp|src/tests/CmdProcessorTest.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -114,7 +114,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="tests/UnitTests.cpp|tests/CmdTimerMultiplexTest.cpp|tests/CmdProcessorTest.cpp|tests/CmdTimerTest.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="tests/ListenerManagerTest.cpp|tests/UnitTests.cpp|tests/CmdTimerMultiplexTest.cpp|tests/CmdProcessorTest.cpp|tests/CmdTimerTest.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

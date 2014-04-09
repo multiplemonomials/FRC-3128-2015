@@ -50,13 +50,13 @@ public:
 	//virtual float GetTwist();
 	//virtual float GetThrottle();
 	//virtual float GetAxis(AxisType axis);
-	float GetRawAxis(uint32_t axis);
+	virtual float GetRawAxis(uint32_t axis);
 
 	//virtual bool GetTrigger(GenericHID::JoystickHand hand = GenericHID::JoystickHand::kRightHand);
 	//virtual bool GetTop(GenericHID::JoystickHand hand = GenericHID::JoystickHand::kRightHand);
 	///virtual bool GetBumper(GenericHID::JoystickHand hand = GenericHID::JoystickHand::kRightHand);
 	//virtual bool GetButton(ButtonType button);
-	bool GetRawButton(uint32_t button);
+	virtual bool GetRawButton(uint32_t button);
 	static Joystick* GetStickForPort(uint32_t port);
 	
 	//virtual float GetMagnitude();
