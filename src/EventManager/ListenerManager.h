@@ -13,7 +13,9 @@
 #include <Joystick.h>
 #include <boost/thread.hpp>
 
+#include "CmdProcessor.h"
 #include "Cmd.h"
+#include "CmdTimerPosix.h"
 
 //This class combines the functions of XControl and ListenerManager.
 //It is constructed with one Joystick object, which confusingly seems
@@ -75,36 +77,59 @@ private:
 
 	std::vector<bool> _buttonValues;
 
-	boost::mutex _mutex;
+	//serializes multithreaded input
+	CmdProcessor _cmdProcessor;
 
-	//thread which polls the joystick and calls listeners if the values change
-	boost::thread _thread;
+	//timer for thread which polls the joystick and calls listeners if the values change
+	CmdTimerPosix _threadTimer;
 
 	//not assignable
 	void operator=(ListenerManager) =  delete;
 
-	//not copy constructable
+	//not copy constructible
 	ListenerManager(ListenerManager&) = delete;
 
 	std::pair<std::vector<bool>, std::vector<double>> pollControls();
+
+	//run polling function via _cmdProcessor
+	void operator()()
+	{
+		_cmdProcessor.EnqueueFront(&ListenerManager::operatorParenthesisImpl, boost::ref(*this));
+	}
+
+	//...
+	void operatorParenthesisImpl();
+	//Come on, don't tell me you didn't laugh a little inside
+
+	void addListenerImpl(Listenable key, ListenerMapType::mapped_type listener);
+
+	void removeAllListenersForControlImpl(Listenable listener);
+
+	void removeAllListenersImpl();
 
 public:
 
 	//construct from existing Joystick
 	ListenerManager(std::shared_ptr<Joystick> joystick);
 
-	//start thread
-	void operator()();
-
 	//add listener for given listenable
 	//multiple listeners can be added for the same listenable
-	void addListener(Listenable key, ListenerMapType::mapped_type listener);
+	void addListener(Listenable key, ListenerMapType::mapped_type listener)
+	{
+		_cmdProcessor.Enqueue(&ListenerManager::addListenerImpl, boost::ref(*this), key, listener);
+	}
 
 	//remove all listeners set for the given listener
-	void removeAllListenersForControl(Listenable listener);
+	void removeAllListenersForControl(Listenable listener)
+	{
+		_cmdProcessor.Enqueue(&ListenerManager::removeAllListenersForControlImpl, boost::ref(*this), listener);
+	}
 
 	//remove all listeners, period
-	void removeAllListeners();
+	void removeAllListeners()
+	{
+		_cmdProcessor.Enqueue(&ListenerManager::removeAllListenersImpl, boost::ref(*this));
+	}
 
 	//returns the boolean value of a button listenable (between A and R3).
 	//Does bounds checking, throws if value is out of range.

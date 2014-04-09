@@ -4,7 +4,17 @@
 #include <boost/exception/all.hpp>
 #include <sstream>
 
+#include <LogMacros.h>
+
 //NOTE: This file has been modified from a library written by Randall Smith
+
+/*-----------------------------------------------------------------------------
+    Use to attach an error message to an exception.  E.g.:
+
+        BOOST_THROW_EXCEPTION(Exception() << ErrMsg("Setting name does not match any supported types."));
+ ----------------------------------------------------------------------------*/
+
+typedef boost::error_info<struct tag_error_msg, std::string> ErrMsg;
 
 
 /*-----------------------------------------------------------------------------
@@ -21,6 +31,7 @@
         std::exception::what: std::exception
  ----------------------------------------------------------------------------*/
 
+
 struct RoboException :
     virtual std::exception,          // Standard C++ exception base class.
     virtual boost::exception         // Allow additions of data.
@@ -30,16 +41,18 @@ struct RoboException :
     {
 
     }
+
+    virtual const char* what()
+    {
+    	LOG_DEBUG("Calling RoboException what()")
+    	return (*(boost::get_error_info<ErrMsg>(*this))).c_str();
+    }
+
+    virtual ~RoboException()
+    {
+
+    }
 };
-
-
-/*-----------------------------------------------------------------------------
-    Use to attach an error message to an exception.  E.g.:
-
-        BOOST_THROW_EXCEPTION(Exception() << ErrMsg("Setting name does not match any supported types."));
- ----------------------------------------------------------------------------*/
-
-typedef boost::error_info<struct tag_error_msg, std::string> ErrMsg;
 
 /*-----------------------------------------------------------------------------
  *	Use to extract the message string from a RoboException

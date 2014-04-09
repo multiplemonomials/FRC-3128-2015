@@ -20,17 +20,13 @@ class Handler
 public:
 	void operator()()
 	{
-		LOG_DEBUG("Handler getting mutex lock..")
 		boost::unique_lock<boost::mutex>();
-		LOG_DEBUG("Handler being invoked..")
 		_wasCalled = true;
 	}
 
 	bool wasCalled()
 	{
-		LOG_DEBUG("Handler polling function getting mutex lock...")
 		boost::unique_lock<boost::mutex>();
-		LOG_DEBUG("Handler polling function being invoked and returning " << (_wasCalled ? "true" : "false"))
 		return _wasCalled;
 	}
 };
@@ -86,8 +82,6 @@ BOOST_AUTO_TEST_CASE(ButtonUp)
 
     ListenerManager listenerManager(joystickMock);
 
-    boost::this_thread::sleep(Time::Milliseconds(200));
-
     listenerManager.addListener(Listenable::AUP, Cmd::MakeShared(boost::ref(handler)));
 
     joystickMock->setButton(1, false);
@@ -120,6 +114,38 @@ BOOST_AUTO_TEST_CASE(Joystick)
 	boost::this_thread::sleep(Time::Milliseconds(200));
 
 	BOOST_CHECK(handler.wasCalled());
+}
+
+/*-----------------------------------------------------------------------------
+    Test Case: Values can be retrieved from the joystick
+ ----------------------------------------------------------------------------*/
+
+BOOST_AUTO_TEST_CASE(ValueRetrieval)
+{
+    BOOST_MESSAGE("------------------------------------------------------------");
+
+
+	// Construct.
+	Handler            handler;
+
+	std::shared_ptr<JoystickMock> joystickMock = std::make_shared<JoystickMock>();
+
+	joystickMock->setButton(4, true);
+
+	ListenerManager listenerManager(joystickMock);
+
+	joystickMock->setJoystick(3, 2.5);
+
+	joystickMock->setButton(8, true);
+
+	boost::this_thread::sleep(Time::Milliseconds(200));
+
+	BOOST_CHECK_EQUAL(listenerManager.getRawDouble(Listenable::TRIGGERS), 2.5);
+
+	BOOST_CHECK_EQUAL(listenerManager.getRawBool(Listenable::YDOWN), true);
+
+	//also check that it's able to hand;e the corner case of someone using an up handler to get a value
+	BOOST_CHECK_EQUAL(listenerManager.getRawBool(Listenable::STARTUP), true);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

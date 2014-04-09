@@ -18,33 +18,29 @@ ListenerManager::ListenerManager(std::shared_ptr<Joystick> joystick)
  _joystick(joystick),
  _joystickValues(16),
  _buttonValues(11),
- _mutex(),
- _thread(boost::ref(*this))
+ _cmdProcessor("ListenerManager"),
+ _threadTimer(Cmd::MakeShared(&ListenerManager::operatorParenthesisImpl, boost::ref(*this)))
 {
-
-
+	_threadTimer.StartRelative(Time::Milliseconds(75));
 }
 
 ListenerManager::~ListenerManager()
 {
-	_thread.interrupt();
+
 }
 
-void ListenerManager::addListener(Listenable key, ListenerMapType::mapped_type listener)
+void ListenerManager::addListenerImpl(Listenable key, ListenerMapType::mapped_type listener)
 {
-	boost::unique_lock<boost::mutex>(_mutex);
 	_listeners.insert(std::make_pair(key, listener));
 }
 
-void ListenerManager::removeAllListeners()
+void ListenerManager::removeAllListenersImpl()
 {
-	boost::unique_lock<boost::mutex>(_mutex);
 	_listeners.clear();
 }
 
-void ListenerManager::removeAllListenersForControl(Listenable listener)
+void ListenerManager::removeAllListenersForControlImpl(Listenable listener)
 {
-	boost::unique_lock<boost::mutex>(_mutex);
 	_listeners.erase(listener);
 }
 
@@ -57,6 +53,21 @@ bool ListenerManager::getRawBool(Listenable listenable)
 		try
 		{
 			return _buttonValues.at(listenable);
+		}
+		catch(std::out_of_range & error)
+		{
+			LOG_RECOVERABLE("Attempt to read data from ListenerManager whose thread has not finished starting")
+		}
+
+		return false;
+	}
+	//if that came up empty, try the up values of those same controls
+	else if(listenable >= Listenable::AUP && listenable <= Listenable::R3UP)
+	{
+		boost::unique_lock<boost::mutex>(_mutex);
+		try
+		{
+			return _buttonValues.at(listenable - 20);
 		}
 		catch(std::out_of_range & error)
 		{
@@ -119,114 +130,101 @@ std::pair<std::vector<bool>, std::vector<double>> ListenerManager::pollControls(
 	return std::make_pair(buttonValues, joystickValues);
 }
 
-void ListenerManager::operator()()
+void ListenerManager::operatorParenthesisImpl()
 {
-	LOG_DEBUG("ListenerManager Thread Starting");
+	auto newValues = pollControls();
 
-	while(true)
+	//test if values have changed
+	if((newValues.first != _buttonValues) || (newValues.second != _joystickValues))
 	{
+		std::unordered_set<ListenerMapType::mapped_type> listenersToInvoke;
 
-		auto newValues = pollControls();
-
-		//test if values have changed
-		if((newValues.first != _buttonValues) || (newValues.second != _joystickValues))
+		//loop through button values
+		for(int counter = Listenable::ADOWN; counter <= Listenable::R3DOWN ; counter++)
 		{
-			std::unordered_set<ListenerMapType::mapped_type> listenersToInvoke;
-
-			//loop through button values
-			for(int counter = Listenable::ADOWN; counter <= Listenable::R3DOWN ; counter++)
+			//has this button been pressed?
+			if((!_buttonValues[counter]) && (newValues.first[counter]))
 			{
-				//has this button been pressed?
-				if((!_buttonValues[counter]) && (newValues.first[counter]))
-				{
-					//get all its registered listeners
-					std::pair<ListenerMapType::const_iterator, ListenerMapType::const_iterator> found_listeners = _listeners.equal_range((Listenable)(counter));
+				//get all its registered listeners
+				std::pair<ListenerMapType::const_iterator, ListenerMapType::const_iterator> found_listeners = _listeners.equal_range((Listenable)(counter));
 
-					if(found_listeners.first != found_listeners.second)
+				if(found_listeners.first != found_listeners.second)
+				{
+					//loop through them
+					for(ListenerMapType::const_iterator iterator = found_listeners.first; iterator != found_listeners.second; iterator++)
 					{
-						//loop through them
-						for(ListenerMapType::const_iterator iterator = found_listeners.first; iterator != found_listeners.second; iterator++)
-						{
-							listenersToInvoke.insert((*iterator).second);
-						}
+						listenersToInvoke.insert((*iterator).second);
 					}
-
 				}
-				//has this button just stopped being pressed?
-				if((!_buttonValues[counter]) && (newValues.first[counter]))
-				{
-					//get all its registered listeners
-					//increment counter by 20 to get button up listeners
-					std::pair<ListenerMapType::const_iterator, ListenerMapType::const_iterator> found_listeners = _listeners.equal_range((Listenable)(counter + 20));
 
-					if(found_listeners.first != found_listeners.second)
+			}
+			//has this button just stopped being pressed?
+			if((!_buttonValues[counter]) && (newValues.first[counter]))
+			{
+				//get all its registered listeners
+				//increment counter by 20 to get button up listeners
+				std::pair<ListenerMapType::const_iterator, ListenerMapType::const_iterator> found_listeners = _listeners.equal_range((Listenable)(counter + 20));
+
+				if(found_listeners.first != found_listeners.second)
+				{
+					//loop through them
+					for(ListenerMapType::const_iterator iterator = found_listeners.first; iterator != found_listeners.second; iterator++)
 					{
-						//loop through them
-						for(ListenerMapType::const_iterator iterator = found_listeners.first; iterator != found_listeners.second; iterator++)
-						{
-							listenersToInvoke.insert((*iterator).second);
-						}
+						listenersToInvoke.insert((*iterator).second);
 					}
-
 				}
-			}
 
-			//loop through joystick values
-			for(int counter = Listenable::JOY1X; counter <= Listenable::JOY2Y ; counter++)
-			{
-				//has this particular value changed?
-				if(_joystickValues[counter] != newValues.second[counter])
-				{
-					//get all its registered listeners
-					std::pair<ListenerMapType::const_iterator, ListenerMapType::const_iterator> found_listeners = _listeners.equal_range((Listenable)(counter));
-
-					if(found_listeners.first != found_listeners.second)
-					{
-						//loop through them
-						for(ListenerMapType::const_iterator iterator = found_listeners.first; iterator != found_listeners.second; iterator++)
-						{
-							listenersToInvoke.insert((*iterator).second);
-						}
-					}
-
-				}
-			}
-
-
-			//update class variables to match new data
-			{
-				boost::unique_lock<boost::mutex>(_mutex);
-				_buttonValues = newValues.first;
-				_joystickValues = newValues.second;
-			}
-
-			//invoke handlers
-			for(std::unordered_set<ListenerMapType::mapped_type>::value_type listener: listenersToInvoke)
-			{
-				try
-				{
-					(*listener)();
-				}
-				catch(RoboException & error)
-				{
-					LOG_RECOVERABLE("Caught a RoboException from a control listener: \n" << GET_ROBOEXCPTION_MESSAGE(error));
-				}
-				catch(...)
-				{
-					LOG_RECOVERABLE("Caught... something from a control listener")
-				}
 			}
 		}
 
-		try
+		//loop through joystick values
+		for(int counter = Listenable::JOY1X; counter <= Listenable::JOY2Y ; counter++)
 		{
-			//TODO configuration setting for time
-			Time::Sleep(Time::Milliseconds(50));
+			//has this particular value changed?
+			if(_joystickValues[counter] != newValues.second[counter])
+			{
+				//get all its registered listeners
+				std::pair<ListenerMapType::const_iterator, ListenerMapType::const_iterator> found_listeners = _listeners.equal_range((Listenable)(counter));
+
+				if(found_listeners.first != found_listeners.second)
+				{
+					//loop through them
+					for(ListenerMapType::const_iterator iterator = found_listeners.first; iterator != found_listeners.second; iterator++)
+					{
+						listenersToInvoke.insert((*iterator).second);
+					}
+				}
+
+			}
 		}
-		catch(boost::thread_interrupted & interrupt)
+
+
+		//update class variables to match new data
 		{
-			return;
+			boost::unique_lock<boost::mutex>(_mutex);
+			_buttonValues = newValues.first;
+			_joystickValues = newValues.second;
+		}
+
+		//invoke handlers
+		for(std::unordered_set<ListenerMapType::mapped_type>::value_type listener: listenersToInvoke)
+		{
+			try
+			{
+				(*listener)();
+			}
+			catch(RoboException & error)
+			{
+				LOG_RECOVERABLE("Caught a RoboException from a control listener: \n" << GET_ROBOEXCPTION_MESSAGE(error));
+			}
+			catch(...)
+			{
+				LOG_RECOVERABLE("Caught... something from a control listener")
+			}
 		}
 	}
+
+	//TODO configuration setting for time
+	_threadTimer.StartRelative(Time::Milliseconds(75));
 }
 
