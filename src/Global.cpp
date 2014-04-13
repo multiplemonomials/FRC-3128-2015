@@ -56,7 +56,9 @@ void Global::initializeRobot()
 	_rotFR->startSpeedControl(90);
 
 	//Disabled for simulation builds, it needs to be done in main
-	//LogCore::instance().addOutput("stdout", std::make_shared<LogOutput<BasicAcceptor, CondensedFormatter, BasicWriter>>());
+#ifndef HOST_BUILD
+	LogCore::instance().addOutput("stdout", std::make_shared<LogOutput<BasicAcceptor, CondensedFormatter, BasicWriter>>());
+#endif
 }
 
 void Global::initializeDisabled()

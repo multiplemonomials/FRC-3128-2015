@@ -56,6 +56,6 @@ MotorDir RobotMath::getMotorDirToTarget(double currentAngle, double targetAngle)
 	int retDir = 1 * (std::abs(currentAngle - targetAngle) > 180 ? 1 : -1) * (currentAngle - targetAngle < 0 ? -1 : 1);
 
 	//MotorDir is syntactic sugar; could just return retDir
-	if (currentAngle - targetAngle == 0 || currentAngle - targetAngle == 180) return MotorDir::NONE;
-	return (retDir == 1 ? MotorDir::CW : MotorDir::CCW);
+	if (currentAngle - targetAngle == 0 || currentAngle - targetAngle == 180) return MotorDir::DIR_NONE;
+	return (retDir == 1 ? MotorDir::DIR_CW : MotorDir::DIR_CCW);
 }

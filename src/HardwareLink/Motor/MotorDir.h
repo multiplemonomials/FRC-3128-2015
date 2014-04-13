@@ -10,9 +10,9 @@
 
 enum MotorDir
 {
-	CCW = -1,
-	NONE = 0,
-	CW = 1
+	DIR_CCW = -1,
+	DIR_NONE = 0,
+	DIR_CW = 1
 };
 
 #endif /* MOTORDIR_H_ */

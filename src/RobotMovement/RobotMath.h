@@ -9,6 +9,7 @@
 #define ROBOTMATH_H_
 
 #include <math.h>
+#include <boost/math/constants/constants.hpp>
 
 #include <HardwareLink/Motor/MotorDir.h>
 
@@ -52,7 +53,7 @@ public:
 	 */
 	 static double dTR(double angle)
 	 {
-		 return M_PI * angle / 180.0;
+		 return boost::math::constants::pi<double>() * angle / 180.0;
 	 }
 
 	/**
@@ -63,7 +64,7 @@ public:
 	 */
 	 static double rTD(double rad)
 	 {
-		 return rad * (180.0 / M_PI);
+		 return rad * (180.0 / boost::math::constants::pi<double>());
 	 }
 };
 

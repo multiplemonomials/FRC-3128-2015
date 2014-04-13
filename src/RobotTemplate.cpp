@@ -21,7 +21,10 @@
 #include <EzLogger/output/writers/BasicWriter.h>
 #include <EzLogger/output/LogOutput.h>
 
-struct RobotTemplate// : public IterativeRobot
+struct RobotTemplate
+#ifndef HOST_BUILD //make things a little easier in the wpimock file
+: public IterativeRobot
+#endif
 {
 	bool autonomousHasBeenInit = false;
 	bool teleopHasBeenInit = false;
@@ -63,24 +66,34 @@ struct RobotTemplate// : public IterativeRobot
 
     void DisabledPeriodic()
     {
-        //GetWatchdog().Feed();
+#ifndef HOST_BUILD
+        GetWatchdog().Feed();
+#endif
     }
 
     void AutonomousPeriodic()
     {
-    	//GetWatchdog().Feed();
+#ifndef HOST_BUILD
+        GetWatchdog().Feed();
+#endif
         boost::this_thread::sleep(boost::posix_time::milliseconds(150));
     }
 
     void TeleopPeriodic()
     {
-    	//GetWatchdog().Feed();
+#ifndef HOST_BUILD
+        GetWatchdog().Feed();
+#endif
         boost::this_thread::sleep(boost::posix_time::milliseconds(150));
     }
 
 };
 
+#ifndef HOST_BUILD
+START_ROBOT_CLASS(RobotTemplate);
+#endif
 
+#ifdef HOST_BUILD
 int main()
 {
 
@@ -106,3 +119,5 @@ int main()
 
 	return 0;
 }
+
+#endif
