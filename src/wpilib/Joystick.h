@@ -4,8 +4,8 @@
 /* must be accompanied by the FIRST BSD license file in $(WIND_BASE)/WPILib.  */
 /*----------------------------------------------------------------------------*/
 
-#ifndef JOYSTICK_H_
-#define JOYSTICK_H_
+#ifndef WPI_JOYSTICK_H_
+#define WPI_JOYSTICK_H_
 
 #include "GenericHID.h"
 #include "ErrorBase.h"
