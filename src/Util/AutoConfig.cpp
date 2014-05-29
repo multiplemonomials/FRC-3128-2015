@@ -13,7 +13,7 @@
 #include <Options.h>
 #include <LogMacros.h>
 
-#define SPINLOCK_UNTIL(expression) if(expression){break;}else{boost::this_thread::sleep(Time::Milliseconds(75));}
+#define SPINLOCK_UNTIL(expression) if(expression){break;}else{boost::this_thread::sleep(Time::Milliseconds(100));}
 
 CmdProcessor AutoConfig::_cmdProcessor("AutoConfigCmdProcessor");
 

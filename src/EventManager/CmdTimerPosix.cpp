@@ -34,7 +34,7 @@ void CmdTimerPosix::CmdTimerPosixImpl::TimerCreate()
     if(timer_create(CLOCK_REALTIME, &mySigEvent, &_timerId) != 0)
     {
         LOG_FATAL("Error creating POSIX timer.  Errno = " <<  errno);
-        assert(false);
+        ASSERT(false);
     }
 }
 
@@ -100,7 +100,7 @@ void CmdTimerPosix::CmdTimerPosixImpl::TimerDelete()
     if (timer_delete(_timerId) != 0)
     {
         LOG_FATAL("Error deleting POSIX timer.  Errno = " <<  errno);
-        assert(false);
+        ASSERT(false);
     }
 }
 

@@ -2,28 +2,18 @@
 // Name        : RobotTemplate.cpp
 // Author      : FRC Team 3128
 // Version     :
-// Copyright   : 
+// Copyright   :
 // Description :
 //============================================================================
 
 #include <iostream>
 #include <initializer_list>
 #include <memory>
-#include <boost/thread.hpp>
-#include <boost/date_time.hpp>
 #include <wpilib/WPILib.h>
 
-#include <LogMacros.h>
-#include "Global.h"
-#include <EzLogger/LogCore.h>
-#include <EzLogger/output/acceptors/BasicAcceptor.h>
-#include <EzLogger/output/formatters/CondensedFormatter.h>
-#include <EzLogger/output/writers/BasicWriter.h>
-#include <EzLogger/output/LogOutput.h>
 
 //The _start function is needed because of a bug in the ppc toolchain's linker script, which generates
 //a reference to __start even though it is not needed
-#ifdef __VXWORKS__
 extern "C" {
 void _start() {
    //output an error message?
@@ -35,8 +25,6 @@ void __assert(const char* message)
 	std::cerr << "Assert Failed: " << message << std::endl;
 }
 
-#endif
-
 struct RobotTemplate
 #ifndef HOST_BUILD //make things a little easier in the wpimock file
 : public IterativeRobot
@@ -45,25 +33,20 @@ struct RobotTemplate
 	bool autonomousHasBeenInit = false;
 	bool teleopHasBeenInit = false;
 
-	Global _global;
 
 	void RobotInit()
 	{
-		LOG_INFO("Welcome to the FRC Team 3128 Event System Version 2!")
-		_global.initializeRobot();
+		std::cout << "Welcome to the FRC Team 3128 Event System Version 2!" << std::endl;
 	}
 
 	void DisabledInit()
 	{
-		_global.initializeDisabled();
 	}
 
     void AutonomousInit()
     {
         if(!autonomousHasBeenInit)
         {
-            _global._listenerManager.removeAllListeners();
-        	_global.initializeAuto();
             autonomousHasBeenInit = true;
             teleopHasBeenInit = false;
         }
@@ -73,8 +56,6 @@ struct RobotTemplate
     {
         if(!teleopHasBeenInit)
         {
-        	_global._listenerManager.removeAllListeners();
-        	_global.initializeTeleop();
             teleopHasBeenInit = true;
             autonomousHasBeenInit = false;
         }
@@ -92,7 +73,6 @@ struct RobotTemplate
 #ifndef HOST_BUILD
         GetWatchdog().Feed();
 #endif
-        boost::this_thread::sleep(boost::posix_time::milliseconds(150));
     }
 
     void TeleopPeriodic()
@@ -100,7 +80,6 @@ struct RobotTemplate
 #ifndef HOST_BUILD
         GetWatchdog().Feed();
 #endif
-        boost::this_thread::sleep(boost::posix_time::milliseconds(150));
     }
 
 };
@@ -112,8 +91,6 @@ START_ROBOT_CLASS(RobotTemplate);
 #ifdef HOST_BUILD
 int main()
 {
-
-	LogCore::instance().addOutput("stdout", std::make_shared<LogOutput<BasicAcceptor, CondensedFormatter, BasicWriter>>());
 
 	RobotTemplate robotTemplate;
 
