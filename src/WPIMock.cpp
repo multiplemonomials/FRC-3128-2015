@@ -12,6 +12,18 @@
 
 #include <WPILib.h>
 
+//master switch for the use of libjoystick to get real joystick values from usb
+#define LIBJOYSTICK_ENABLED
+
+//port to connect to joystick on
+#define LIBJOYSTICK_PORT "/dev/input/js2"
+
+#ifdef LIBJOYSTICK_ENABLED
+
+#include <libjoystick/Joystick.h>
+
+#endif
+
 uint32_t DigitalInput::Get()
 {
 	LOG_INFO("DigitalInput::Get called.")
@@ -36,7 +48,7 @@ AnalogChannel::AnalogChannel(uint8_t moduleNumber, uint32_t channel)
 
 float AnalogChannel::GetVoltage()
 {
-	LOG_INFO("AnalogChannel::GetVoltage() called.");
+	//LOG_INFO("AnalogChannel::GetVoltage() called.");
 	return 0.0;
 }
 
@@ -139,13 +151,19 @@ Relay::~Relay()
 
 }
 
+#ifdef LIBJOYSTICK_ENABLED
+
+static joy::Joystick testingJoystick(std::string("/dev/input/js2"));
+
+#endif
+
 Joystick::Joystick(unsigned int port)
 :m_ds(nullptr),
  m_port(port),
  m_axes(nullptr),
  m_buttons(nullptr)
 {
-	LOG_INFO("Relay::Relay(" << port << ") called.")
+	LOG_INFO("Joystick::Joystick(" << port << ") called.")
 }
 
 Joystick::~Joystick()
@@ -155,12 +173,32 @@ Joystick::~Joystick()
 
 bool Joystick::GetRawButton(uint32_t button)
 {
+#ifdef LIBJOYSTICK_ENABLED
+
+	bool rawValue =  testingJoystick.getButtonValue(button - 1);
+
+	LOG_INFO("Joystick::GetRawButton(" << button << ") called, returning " << std::boolalpha << rawValue)
+
+	return rawValue;
+
+#else
 	LOG_INFO("Joystick::GetRawButton(" << button << ") called.")
 	return false;
+#endif
 }
 
 float Joystick::GetRawAxis(uint32_t axis)
 {
+#ifdef LIBJOYSTICK_ENABLED
+
+	float rawValue = (testingJoystick.getAxisValue(axis - 1) / 32768.0);
+
+	LOG_INFO("Joystick::GetRawAxis(" << axis << ") called, returning " << rawValue)
+
+	return rawValue;
+
+#else
 	LOG_INFO("Joystick::GetRawAxis(" << axis << ") called.")
 	return 0.0;
+#endif
 }
