@@ -23,7 +23,7 @@ Rendezvous::Rendezvous()
 
 void Rendezvous::Wait() const
 {
-    boost::unique_lock<boost::mutex>    lock(_mutex);
+    std::unique_lock<std::mutex>    lock(_mutex);
 
     // If Notify has not been called...
     while (!_notified)
@@ -43,38 +43,38 @@ void Rendezvous::Wait() const
 }
 
 
-/*-----------------------------------------------------------------------------
-
- ----------------------------------------------------------------------------*/
-
-bool Rendezvous::TimedWait(Time::Duration const & timeoutPeriod) const
-{
-    boost::unique_lock<boost::mutex>    lock(_mutex);
-
-    // If Notify has not been called...
-    while (!_notified)
-    {
-        // Wait here until one of the Notify services is called.
-        //
-        // (NB: wait() releases _mutex while waiting, so others can call
-        // a Notify service on this object, e.g., then re-acquires it
-        // before it returns.)
-        if (!_waiters.timed_wait(lock, timeoutPeriod))
-        {
-            // Returning because we timed out before Notify() was called.
-            return false;
-        }
-    }
-
-
-    // Reset the notification indicator for the next waiter (we have the lock again now!)
-    // Each call to Notify will thus release one waiting thread.
-    _notified = false;
-
-
-    // Returning normally (not because of a timeout).
-    return true;
-}
+///*-----------------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------------*/
+//
+//bool Rendezvous::TimedWait(std::chrono::duration const & timeoutPeriod) const
+//{
+//    std::unique_lock<std::mutex>    lock(_mutex);
+//
+//    // If Notify has not been called...
+//    while (!_notified)
+//    {
+//        // Wait here until one of the Notify services is called.
+//        //
+//        // (NB: wait() releases _mutex while waiting, so others can call
+//        // a Notify service on this object, e.g., then re-acquires it
+//        // before it returns.)
+//        if (!_waiters.wait_for(lock, timeoutPeriod))
+//        {
+//            // Returning because we timed out before Notify() was called.
+//            return false;
+//        }
+//    }
+//
+//
+//    // Reset the notification indicator for the next waiter (we have the lock again now!)
+//    // Each call to Notify will thus release one waiting thread.
+//    _notified = false;
+//
+//
+//    // Returning normally (not because of a timeout).
+//    return true;
+//}
 
 /*-----------------------------------------------------------------------------
 
@@ -84,7 +84,7 @@ void Rendezvous::NotifyOne() const
 {
     // Synchronously update the you-have-been-notified flag.
     {
-        boost::unique_lock<boost::mutex>    lock(_mutex);
+        std::unique_lock<std::mutex>    lock(_mutex);
 
         // If this object is already in the notified state when someone
         // calls Notify, the notification will effectively be lost.  If this
@@ -111,7 +111,7 @@ void Rendezvous::NotifyAll() const
 {
     // Synchronously update the you-have-been-notified flag.
     {
-        boost::unique_lock<boost::mutex>    lock(_mutex);
+        std::unique_lock<std::mutex>    lock(_mutex);
 
         // If this object is already in the notified state when someone
         // calls Notify, the notification will effectively be lost.  If this

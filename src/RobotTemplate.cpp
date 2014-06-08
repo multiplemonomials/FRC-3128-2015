@@ -9,9 +9,9 @@
 #include <iostream>
 #include <initializer_list>
 #include <memory>
-#include <boost/thread.hpp>
 #include <boost/date_time.hpp>
 #include <wpilib/WPILib.h>
+#include <thread>
 
 #include <LogMacros.h>
 #include "Global.h"
@@ -92,7 +92,7 @@ struct RobotTemplate
 #ifndef HOST_BUILD
         GetWatchdog().Feed();
 #endif
-        boost::this_thread::sleep(boost::posix_time::milliseconds(150));
+        std::this_thread::sleep_for(std::chrono::milliseconds(150));
     }
 
     void TeleopPeriodic()
@@ -100,7 +100,7 @@ struct RobotTemplate
 #ifndef HOST_BUILD
         GetWatchdog().Feed();
 #endif
-        boost::this_thread::sleep(boost::posix_time::milliseconds(150));
+        std::this_thread::sleep_for(std::chrono::milliseconds(150));
     }
 
 };

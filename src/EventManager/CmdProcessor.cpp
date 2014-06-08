@@ -15,7 +15,7 @@ CmdProcessor::CmdProcessor
 :   _name(name + "CmdProcessor"),
     _queue(),
     _keepRunning(true),
-    _thread(boost::ref(*this), _name)
+    _thread(&CmdProcessor::operator(), this, _name)
 {
     LOG_INFO("CmdProcessor(): Constructor completed for '" << _name << "'.");
 }
@@ -35,7 +35,7 @@ CmdProcessor::~CmdProcessor()
 
 
     // Wait for the thread to shut down.
-    _thread.join();
+   // _thread.join();
 
 
     LOG_INFO("~CmdProcessor(): Shut down thread '" << _name << "'.");
@@ -50,7 +50,7 @@ CmdProcessor::~CmdProcessor()
 void CmdProcessor::ShutDown()
 {
     // Enqueue the shutdown command.
-	 _thread.interrupt();
+	 //_thread.interrupt();
 
     LOG_INFO("CmdProcessor::ShutDown(): Shutting down thread '" << _name << "'.");
 }
@@ -77,11 +77,11 @@ void CmdProcessor::operator()
             Cmd::SharedPtr  cmdPtr(_queue.Dequeue());
             (*cmdPtr)();
         }
-        //thread shutdown signal
-        catch(boost::thread_interrupted & interrupt)
-        {
-        	return;
-        }
+//        //thread shutdown signal
+//        catch(boost::thread_interrupted & interrupt)
+//        {
+//        	return;
+//        }
         catch(std::exception & error)
         {
         	LOG_RECOVERABLE("Error processsing event: " << error.what())

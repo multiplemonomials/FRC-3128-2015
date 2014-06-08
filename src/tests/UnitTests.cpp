@@ -10,8 +10,7 @@
 
 #include <LogMacros.h>
 
-namespace m2mslap
-{
+//NOTE: this file is from a library written by Randall Smith
 
 /*-----------------------------------------------------------------------------
     "Sanity" unit test to verify the operation of the unit test framework.
@@ -38,6 +37,3 @@ BOOST_AUTO_TEST_CASE(UnitTestsFailureTest)
 
 
 BOOST_AUTO_TEST_SUITE_END()
-
-
-} /* namespace m2mslap */

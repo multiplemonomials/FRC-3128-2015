@@ -18,9 +18,8 @@ Queue template that can be safely shared by multiple threads.
 #define BOOST_THREAD_DYN_LINK
 
 #include <queue>
-#include "boost/thread/mutex.hpp"
-#include "boost/thread/condition_variable.hpp"
-#include "boost/thread/lock_types.hpp"
+#include <mutex>
+#include <condition_variable>
 
 
 /*-----------------------------------------------------------------------------
@@ -36,11 +35,11 @@ class ThreadSafeQueue
 
 
     // Mutex object we will synchronize on.
-    boost::mutex                _mutex;
+    std::mutex                _mutex;
 
 
     // Synchronizer object that readers of an empty queue will wait on.
-    boost::condition_variable   _nonEmpty;
+    std::condition_variable   _nonEmpty;
 
 
 public:
@@ -53,7 +52,7 @@ public:
     size_type size()
     {
         // Acquire the lock (automagically release when leaving scope).
-        boost::unique_lock<boost::mutex> lock(_mutex);
+        std::unique_lock<std::mutex> lock(_mutex);
 
         return _deque.size();
     }
@@ -69,7 +68,7 @@ public:
     )
     {
         // Acquire the lock (automagically release when leaving scope).
-        boost::unique_lock<boost::mutex> lock(_mutex);
+        _mutex.lock();
 
 
         // Enqueue the data at the appropriate end of the queue.
@@ -85,6 +84,8 @@ public:
 
         // Notify another waiting thread that data is ready.
         _nonEmpty.notify_one();
+
+        _mutex.unlock();
     }
 
 
@@ -93,7 +94,7 @@ public:
     T Dequeue()
     {
         // Acquire the lock (automagically release when leaving scope).
-        boost::unique_lock<boost::mutex> lock(_mutex);
+        std::unique_lock<std::mutex> lock(_mutex);
 
 
         // If queue is empty, wait.

@@ -4,7 +4,6 @@
 #ifndef RENDEZVOUSMOCK_H_
 #define RENDEZVOUSMOCK_H_
 
-#include <boost/thread/thread.hpp>
 
 #include "RendezvousBase.h"
 

@@ -12,8 +12,9 @@
 #include <HardwareLink/LightChangeEvent.h>
 #include <Options.h>
 #include <LogMacros.h>
+#include <chrono>
 
-#define SPINLOCK_UNTIL(expression) if(expression){break;}else{boost::this_thread::sleep(Time::Milliseconds(100));}
+#define SPINLOCK_UNTIL(expression) if(expression){break;}else{std::this_thread::sleep_for(std::chrono::milliseconds(100));}
 
 CmdProcessor AutoConfig::_cmdProcessor("AutoConfigCmdProcessor");
 
@@ -110,10 +111,10 @@ void AutoConfig::initialize(Global & global)
 	_cmdProcessor.EnqueueLambda(new Cmd::Functor([&]()//Do a dance
 	{
 		lightChange(Options::Alliance::BLUE, global._redLights, global._blueLights);
-		boost::this_thread::sleep(Time::Seconds(1));
+		std::this_thread::sleep_for(std::chrono::seconds(1));
 
 		lightChange(Options::Alliance::RED, global._redLights, global._blueLights);
-		boost::this_thread::sleep(Time::Seconds(1));
+		std::this_thread::sleep_for(std::chrono::seconds(1));
 
 	}));
 

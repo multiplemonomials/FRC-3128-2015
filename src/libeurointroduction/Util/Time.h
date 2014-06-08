@@ -5,7 +5,6 @@
 #define TIME_H_
 
 #include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/thread.hpp>
 
 /*-----------------------------------------------------------------------------
     Very thin adaptor to bring the boost::posix_time stuff out in a more
@@ -80,15 +79,15 @@ struct Time
     }
 
 
-    /*-----------------------------------------------------------------------------
-        Sleep.
-     ----------------------------------------------------------------------------*/
-
-    // Sleep current thread for specified duration.
-    static void Sleep(Duration const & duration)
-    {
-        boost::this_thread::sleep(duration);
-    }
+//    /*-----------------------------------------------------------------------------
+//        Sleep.
+//     ----------------------------------------------------------------------------*/
+//
+//    // Sleep current thread for specified duration.
+//    static void Sleep(Duration const & duration)
+//    {
+//        boost::this_thread::sleep(duration);
+//    }
 
 
     /*-----------------------------------------------------------------------------

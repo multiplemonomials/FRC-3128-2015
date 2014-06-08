@@ -8,8 +8,7 @@
 #include "LogCore.h"
 
 LogCore::LogCore()
-:_loggingCoreMutex(),
- _outputs()
+:_outputs()
 {
 
 }

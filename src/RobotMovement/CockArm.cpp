@@ -28,7 +28,7 @@ CockArm::~CockArm()
 
 void CockArm::execute()
 {
-	boost::unique_lock<boost::mutex>(_mutex);
+	std::unique_lock<std::mutex>(_mutex);
 
 	if(!_cockArmActive || Options::instance()._armEnabled)
 	{
@@ -65,13 +65,13 @@ void CockArm::cancel()
 
 void CockArm::stopArmCock()
 {
-	boost::unique_lock<boost::mutex>(_mutex);
+	std::unique_lock<std::mutex>(_mutex);
 	_cockArmActive = false;
 }
 
 void CockArm::startArmCock()
 {
-	boost::unique_lock<boost::mutex>(_mutex);
+	std::unique_lock<std::mutex>(_mutex);
 	_cockArmActive = true;
 
 }

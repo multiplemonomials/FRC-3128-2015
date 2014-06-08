@@ -8,11 +8,10 @@
 #ifndef MOTORCONTROL_H_
 #define MOTORCONTROL_H_
 
-#include <boost/thread.hpp>
-
 #include <Util/Time.h>
 #include "MotorLink.h"
 #include <EventManager/CmdTimerPosix.h>
+#include <mutex>
 
 
 /*
@@ -27,7 +26,7 @@ protected:
 
     MotorLink * _controlledMotor;
 
-    boost::mutex _mutex;
+    std::mutex _mutex;
 
     //timer object to regularly call execute()
     CmdTimerPosix _speedSetScheduler;

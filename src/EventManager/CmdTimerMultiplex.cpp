@@ -25,7 +25,7 @@ void CmdTimerMultiplex::startTimer(Time::Duration time, Cmd::SharedPtr command)
 	timer->SetCmd(command);
 	timer->StartRelative(time);
 
-	boost::unique_lock<boost::mutex> lock(_mutex);
+	std::unique_lock<std::mutex> lock(_mutex);
 	_timerMap[timer->GetImpl()] = timer;
 }
 
@@ -35,7 +35,7 @@ void CmdTimerMultiplex::startTimer(Time::Timepoint time, Cmd::SharedPtr command)
 	timer->SetCmd(command);
 	timer->StartAbsolute(time);
 
-	boost::unique_lock<boost::mutex> lock(_mutex);
+	std::unique_lock<std::mutex> lock(_mutex);
 	_timerMap[timer->GetImpl()] = timer;
 }
 
@@ -52,7 +52,7 @@ void CmdTimerMultiplex::onTimerFire(CmdTimerImpl * timerPtr, Cmd::SharedPtr cmdT
 		LOG_RECOVERABLE("Error processsing event: " << error.what())
 	}
 
-	boost::unique_lock<boost::mutex> lock(_mutex);
+	std::unique_lock<std::mutex> lock(_mutex);
 
 	if(_timerMap.erase(timerPtr))
 	{

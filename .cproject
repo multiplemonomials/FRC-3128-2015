@@ -27,7 +27,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.658668967" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler">
 								<option id="gnu.cpp.compiler.option.optimization.level.1261544349" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.debugging.level.1193838890" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.other.other.729284227" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-Wno-unused-local-typedefs -c -fmessage-length=0 --std=gnu++11" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.other.other.729284227" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-Wno-unused-local-typedefs -c -fmessage-length=0 -fdiagnostics-show-option" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.include.paths.1526212791" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/usr/include/boost_1_54_0"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/wpilib/vxworks}&quot;"/>
@@ -40,14 +40,15 @@
 									<listOptionValue builtIn="false" value="HOST_BUILD"/>
 									<listOptionValue builtIn="false" value="__cplusplus=201311L"/>
 								</option>
+								<option id="gnu.cpp.compiler.option.optimization.flags.411249283" name="Other optimization flags" superClass="gnu.cpp.compiler.option.optimization.flags" value="-Og" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.dialect.std.1205000507" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.dialect.flags.623619223" name="Other dialect flags" superClass="gnu.cpp.compiler.option.dialect.flags" value="--std=gnu++1y" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1533403122" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.741114075" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker"/>
 							<tool id="cdt.managedbuild.tool.gnu.cross.cpp.linker.778863685" name="Cross G++ Linker" superClass="cdt.managedbuild.tool.gnu.cross.cpp.linker">
 								<option id="gnu.cpp.link.option.libs.2086554585" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="boost_thread"/>
 									<listOptionValue builtIn="false" value="rt"/>
-									<listOptionValue builtIn="false" value="boost_system"/>
 									<listOptionValue builtIn="false" value="pthread"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1041662056" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
@@ -62,7 +63,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src/CrioTest.cpp|src/tests/Mock/JoystickMock.cpp|src/tests/ListenerManagerTest.cpp|src/tests/CmdTimerMultiplexTest.cpp|src/tests/CmdTimerTest.cpp|src/tests/UnitTests.cpp|src/tests/CmdProcessorTest.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/tests|src/CrioTest.cpp|src/tests/Mock/JoystickMock.cpp|src/tests/ListenerManagerTest.cpp|src/tests/CmdTimerMultiplexTest.cpp|src/tests/CmdTimerTest.cpp|src/tests/UnitTests.cpp|src/tests/CmdProcessorTest.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -102,7 +103,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/wpilib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/libeurointroduction/EzLogger}&quot;"/>
 								</option>
-								<option id="gnu.cpp.compiler.option.preprocessor.def.614882267" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+								<option id="gnu.cpp.compiler.option.preprocessor.def.614882267" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="__cplusplus=201311L"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.782523439" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
@@ -121,7 +122,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="CrioTest.cpp|tests/Mock/JoystickMock.cpp|tests/ListenerManagerTest.cpp|tests/UnitTests.cpp|tests/CmdTimerMultiplexTest.cpp|tests/CmdProcessorTest.cpp|tests/CmdTimerTest.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="tests|CrioTest.cpp|tests/Mock/JoystickMock.cpp|tests/ListenerManagerTest.cpp|tests/UnitTests.cpp|tests/CmdTimerMultiplexTest.cpp|tests/CmdProcessorTest.cpp|tests/CmdTimerTest.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -240,13 +241,12 @@
 									<listOptionValue builtIn="false" value="__linux"/>
 									<listOptionValue builtIn="false" value="__linux__"/>
 								</option>
+								<option id="gnu.cpp.compiler.option.dialect.std.201299898" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.2060472537" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.382909555" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker"/>
 							<tool command="powerpc-wrs-vxworks-g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.tool.gnu.cross.cpp.linker.90106667" name="Cross G++ Linker" superClass="cdt.managedbuild.tool.gnu.cross.cpp.linker">
 								<option id="gnu.cpp.link.option.libs.976449151" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="boost_thread"/>
-									<listOptionValue builtIn="false" value="boost_system"/>
 									<listOptionValue builtIn="false" value="wpilib"/>
 									<listOptionValue builtIn="false" value="supc++"/>
 									<listOptionValue builtIn="false" value="stdc++"/>
@@ -269,7 +269,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src/CrioTest.cpp|src/tests/Mock/JoystickMock.cpp|src/wpilib/Error.cpp|src/WPIMock.cpp|src/tests/ListenerManagerTest.cpp|src/tests/CmdTimerMultiplexTest.cpp|src/tests/CmdTimerTest.cpp|src/tests/UnitTests.cpp|src/tests/CmdProcessorTest.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/tests|src/CrioTest.cpp|src/tests/Mock/JoystickMock.cpp|src/wpilib/Error.cpp|src/WPIMock.cpp|src/tests/ListenerManagerTest.cpp|src/tests/CmdTimerMultiplexTest.cpp|src/tests/CmdTimerTest.cpp|src/tests/UnitTests.cpp|src/tests/CmdProcessorTest.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -315,7 +315,7 @@
 									<listOptionValue builtIn="false" value="TOOL=gnu"/>
 									<listOptionValue builtIn="false" value="__cplusplus=201103L"/>
 								</option>
-								<option id="gnu.cpp.compiler.option.preprocessor.undef.820851715" name="Undefined symbols (-U)" superClass="gnu.cpp.compiler.option.preprocessor.undef" valueType="undefDefinedSymbols"/>
+								<option id="gnu.cpp.compiler.option.preprocessor.undef.820851715" name="Undefined symbols (-U)" superClass="gnu.cpp.compiler.option.preprocessor.undef"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.194923113" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.384449553" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker"/>
@@ -343,7 +343,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src/Global.cpp|src/Options.cpp|src/HardwareLink|src/libeurointroduction|src/RobotMovement|src/Util|src/EventManager|src/RobotTemplate.cpp|src/tests/Mock/JoystickMock.cpp|src/wpilib/Error.cpp|src/WPIMock.cpp|src/tests/ListenerManagerTest.cpp|src/tests/CmdTimerMultiplexTest.cpp|src/tests/CmdTimerTest.cpp|src/tests/UnitTests.cpp|src/tests/CmdProcessorTest.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/tests|src/Global.cpp|src/Options.cpp|src/HardwareLink|src/libeurointroduction|src/RobotMovement|src/Util|src/EventManager|src/RobotTemplate.cpp|src/tests/Mock/JoystickMock.cpp|src/wpilib/Error.cpp|src/WPIMock.cpp|src/tests/ListenerManagerTest.cpp|src/tests/CmdTimerMultiplexTest.cpp|src/tests/CmdTimerTest.cpp|src/tests/UnitTests.cpp|src/tests/CmdProcessorTest.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

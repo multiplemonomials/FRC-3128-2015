@@ -7,7 +7,6 @@
 #include <time.h>
 #include <map>
 #include <boost/date_time.hpp>
-#include <boost/thread/mutex.hpp>
 
 #include "CmdTimer.h"
 #include "Cmd.h"

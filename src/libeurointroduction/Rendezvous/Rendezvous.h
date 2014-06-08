@@ -4,10 +4,11 @@
 #ifndef RENDEZVOUS_H_
 #define RENDEZVOUS_H_
 
-#include <boost/thread/thread.hpp>
-
 #include "RendezvousBase.h"
 #include <Util/Time.h>
+
+#include <mutex>
+#include <condition_variable>
 
 /*-----------------------------------------------------------------------------
      General-purpose synchronization object to be used when one thread
@@ -31,8 +32,8 @@
 class Rendezvous : public RendezvousBase
 {
     // Mutex and synchronizer used to coordinate things.
-    mutable boost::mutex                            _mutex;
-    mutable boost::condition_variable               _waiters;
+    mutable std::mutex                            _mutex;
+    mutable std::condition_variable               _waiters;
 
 
     // True if Notify() has been called since construction.
@@ -67,7 +68,7 @@ public:
     // Blocks until another thread calls one of the Notify() services,
     // or the specified time elapses.  Returns false if the timeout expired
     // before notification occurred.
-    virtual bool TimedWait(Time::Duration const & timeoutPeriod) const;
+    //virtual bool TimedWait(std::chrono::duration const & timeoutPeriod) const;
 
 
     // Wake up one of the threads waiting on this barrier.

@@ -1,4 +1,3 @@
-#include "boost/thread/lock_types.hpp"
 
 #include "CmdTimerPosix.h"
 #include "Util/DefineZeroedStruct.h"

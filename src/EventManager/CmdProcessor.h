@@ -2,7 +2,7 @@
 #define CMDPROCESSOR_H_
 
 #include <future>
-#include <boost/thread/thread.hpp>
+#include <thread>
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 #include <memory>
@@ -41,7 +41,7 @@ class CmdProcessor
 
 
     // Thread.
-    boost::thread                               _thread;
+    std::thread                               _thread;
 
     // Cause the message processing loop to shut down.
     //

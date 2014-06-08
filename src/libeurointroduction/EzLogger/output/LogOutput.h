@@ -8,7 +8,8 @@
 #define LOGOUTPUT_H_
 
 #include <memory>
-#include <boost/thread/thread.hpp>
+#include <thread>
+#include <mutex>
 
 #include <LogMessage.h>
 #include <ThreadSafeQueue/ThreadSafeQueue.h>
@@ -34,7 +35,7 @@ class LogOutput : public LogOutputBaseClass
 	std::shared_ptr<Formatter_T> _formatterPtr;
 	std::shared_ptr<Writer_T> _writerPtr;
 
-	boost::thread _objectThread;
+	std::thread _objectThread;
 
 	//is run in a different thread.
 	//(every logger object has its own thread)

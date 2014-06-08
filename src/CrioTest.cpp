@@ -26,7 +26,7 @@ void __assert(const char* message)
 }
 
 struct RobotTemplate
-#ifndef HOST_BUILD //make things a little easier in the wpimock file
+#ifndef HOST_BUILD //make things a little easier in the wpimock file by not extending IterativeRobot
 : public IterativeRobot
 #endif
 {
