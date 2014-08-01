@@ -11,7 +11,7 @@
 #include <memory>
 #include <boost/thread.hpp>
 #include <boost/date_time.hpp>
-#include <wpilib/WPILib.h>
+#include <WPILib.h>
 
 #include <LogMacros.h>
 #include "Global.h"
