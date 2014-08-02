@@ -301,12 +301,11 @@
 								<option id="gnu.cpp.compiler.option.debugging.level.2124826184" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.other.other.595386021" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-Wno-unused-local-typedefs -c -fmessage-length=0 -fdiagnostics-show-option" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.include.paths.1770762868" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/libeurointroduction/src}&quot;"/>
 									<listOptionValue builtIn="false" value="/usr/include/wpiharness"/>
 									<listOptionValue builtIn="false" value="/usr/include/wpiharness/WPILib"/>
 									<listOptionValue builtIn="false" value="/usr/include/boost_1_54_0"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/libeurointroduction}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/libeurointroduction/EzLogger}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.1900689855" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="__cplusplus=201103L"/>
@@ -322,10 +321,10 @@
 									<listOptionValue builtIn="false" value="WPILibTestHarness"/>
 									<listOptionValue builtIn="false" value="eurointroduction"/>
 									<listOptionValue builtIn="false" value="boost_system"/>
-									<listOptionValue builtIn="false" value="wx_baseu-2.8"/>
-									<listOptionValue builtIn="false" value="wx_gtk2u_xrc-2.8"/>
-									<listOptionValue builtIn="false" value="wx_gtk2u_adv-2.8 "/>
-									<listOptionValue builtIn="false" value="wx_gtk2u_core-2.8"/>
+									<listOptionValue builtIn="false" value="wx_baseu-3.0"/>
+									<listOptionValue builtIn="false" value="wx_gtk2u_xrc-3.0"/>
+									<listOptionValue builtIn="false" value="wx_gtk2u_adv-3.0"/>
+									<listOptionValue builtIn="false" value="wx_gtk2u_core-3.0"/>
 									<listOptionValue builtIn="false" value="rt"/>
 									<listOptionValue builtIn="false" value="pthread"/>
 								</option>

@@ -18,6 +18,7 @@ class RobotMath
 public:
 	virtual ~RobotMath();
 
+	//returns -1.0 if the argument is negative, ot 1.0 if the argument is positive
 	static double sgn(double n);
 
 	//returns whether or not the power is valid

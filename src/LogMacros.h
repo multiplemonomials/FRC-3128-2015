@@ -12,10 +12,10 @@
 //so forward the log messages to Boost Test
 #ifndef UNIT_TEST
 
-#include <LogMessage.h>
-#include <LogCore.h>
+#include <EzLogger/LogMessage.h>
+#include <EzLogger/LogCore.h>
 #include <memory>
-#include <Tags.h>
+#include <EzLogger/Tags.h>
 
 #define LOG_DEBUG(args) \
 { \
