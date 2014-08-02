@@ -12,6 +12,7 @@
 #include "Cmd.h"
 #include "CmdTimer.h"
 #include <Util/Time.h>
+#include <mutex>
 
 /*
  * Each CmdTimer holds only one cmd, so this object
@@ -27,7 +28,7 @@ private:
 
 	CmdTimerMapType _timerMap;
 
-	boost::mutex _mutex;
+	std::mutex _mutex;
 
 public:
 

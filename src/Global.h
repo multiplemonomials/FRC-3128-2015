@@ -48,11 +48,13 @@ public:
 	std::shared_ptr<RelayLink> _blueLights;
 	std::shared_ptr<RelayLink> _camLights;
 
+	///polls controller and triggers updates when data changes
 	ListenerManager _listenerManager;
 
+	///manages all three swerve modules (one drive motor and one steering motor each)
 	std::shared_ptr<SwerveDrive> _swerveDrive;
 
-	//massive constructor which boots up the robot
+	///massive constructor which boots up the robot
 	Global();
 
 	//not assignable

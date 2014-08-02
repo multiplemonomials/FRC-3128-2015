@@ -14,7 +14,8 @@
 #include <unordered_set>
 
 ListenerManager::ListenerManager(std::shared_ptr<Joystick> joystick)
-:_listeners(),
+:_mutex(),
+ _listeners(),
  _joystick(joystick),
  _joystickValues(16),
  _buttonValues(11),
@@ -49,7 +50,7 @@ bool ListenerManager::getRawBool(Listenable listenable)
 	//check that this listenable is one of the boolean valued ones
 	if(listenable >= Listenable::ADOWN && listenable <= Listenable::R3DOWN)
 	{
-		boost::unique_lock<boost::mutex>(_mutex);
+		std::unique_lock<std::mutex>(_mutex);
 		try
 		{
 			return _buttonValues.at(listenable);
@@ -64,7 +65,7 @@ bool ListenerManager::getRawBool(Listenable listenable)
 	//if that came up empty, try the up values of those same controls
 	else if(listenable >= Listenable::AUP && listenable <= Listenable::R3UP)
 	{
-		boost::unique_lock<boost::mutex>(_mutex);
+		std::unique_lock<std::mutex>(_mutex);
 		try
 		{
 			return _buttonValues.at(listenable - 20);
@@ -89,7 +90,7 @@ double ListenerManager::getRawDouble(Listenable listenable)
 	//check that this listenable is one of the double valued ones
 	if(listenable >= Listenable::JOY1X && listenable <= Listenable::JOY2Y)
 	{
-		boost::unique_lock<boost::mutex>(_mutex);
+		std::unique_lock<std::mutex>(_mutex);
 		try
 		{
 			return _joystickValues.at(listenable);
@@ -113,7 +114,7 @@ std::pair<std::vector<bool>, std::vector<double>> ListenerManager::pollControls(
 	std::vector<bool> buttonValues(11);
 	std::vector<double> joystickValues(16);
 
-	boost::unique_lock<boost::mutex>(_mutex);
+	std::unique_lock<std::mutex>(_mutex);
 
 	//read button values
 	for(int counter = Listenable::ADOWN; counter <= Listenable::R3DOWN ; counter++)
@@ -201,7 +202,7 @@ void ListenerManager::operatorParenthesisImpl()
 
 		//update class variables to match new data
 		{
-			boost::unique_lock<boost::mutex>(_mutex);
+			std::unique_lock<std::mutex>(_mutex);
 			_buttonValues = newValues.first;
 			_joystickValues = newValues.second;
 		}

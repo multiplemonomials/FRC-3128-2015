@@ -11,7 +11,7 @@
 #include <type_traits>
 #include <unordered_map>
 #include <Joystick.h>
-#include <boost/thread.hpp>
+#include <mutex>
 
 #include "CmdProcessor.h"
 #include "Cmd.h"
@@ -65,6 +65,9 @@ public:
 	typedef std::shared_ptr<boost::function<void()>> listenerFunctionType;
 
 private:
+
+	std::mutex _mutex;
+
 	typedef std::unordered_multimap<Listenable, listenerFunctionType, std::hash<int>> ListenerMapType;
 
 	//maps the listeners to the control inputs

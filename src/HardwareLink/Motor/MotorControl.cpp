@@ -5,8 +5,6 @@
  *      Author: jamie
  */
 
-#include <boost/thread.hpp>
-
 #include "MotorControl.h"
 #include <Util/Time.h>
 #include "MotorLink.h"
@@ -19,14 +17,14 @@ MotorControl::~MotorControl()
 
 void MotorControl::setControlledMotor(MotorLink * m)
 {
-	boost::unique_lock<boost::mutex>();
+	std::unique_lock<std::mutex>();
 	_controlledMotor = m;
 }
 
 
 void MotorControl::setControlTarget(double & val)
 {
-	boost::unique_lock<boost::mutex>();
+	std::unique_lock<std::mutex>();
 	setControlTargetImpl(val);
 }
 
@@ -47,7 +45,7 @@ double MotorControl::getLinkedEncoderAngle()
 
 void MotorControl::cancel()
 {
-	boost::unique_lock<boost::mutex>();
+	std::unique_lock<std::mutex>();
 	_speedSetScheduler.Cancel();
 }
 
@@ -64,7 +62,7 @@ void MotorControl::start()
 
 void MotorControl::execute()
 {
-	boost::unique_lock<boost::mutex>(_mutex);
+	std::unique_lock<std::mutex>(_mutex);
 
 
 	//TODO This logic was modified because it seemed bugged.  Find out if it was a bug or a feature.
@@ -85,7 +83,7 @@ void MotorControl::execute()
 
 void MotorControl::clearControlRun()
 {
-	boost::unique_lock<boost::mutex>(_mutex);
+	std::unique_lock<std::mutex>(_mutex);
 	clearControlRunImpl();
 }
 

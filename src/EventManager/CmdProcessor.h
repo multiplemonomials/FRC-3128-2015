@@ -1,6 +1,7 @@
 #ifndef CMDPROCESSOR_H_
 #define CMDPROCESSOR_H_
 
+#include <thread>
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 #include <memory>

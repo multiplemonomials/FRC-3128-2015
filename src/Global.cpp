@@ -14,29 +14,30 @@
 #include <EzLogger/output/LogOutput.h>
 #include <Util/AutoConfig.h>
 #include <HardwareLink/LightChangeEvent.h>
+#include <bits/shared_ptr.h>
 
 
 Global::Global()
 :_gyr(std::make_shared<Gyro>(1, 1)),
-_shooterTSensor(std::make_shared<DigitalInput>(1, 4)),
+_shooterTSensor(std::make_shared<DigitalInput>(4, 4)),
 _encFR(std::make_shared<MagneticPotEncoder>(-60, 1, 2)),
 _encFL(std::make_shared<MagneticPotEncoder>(17, 1, 3)),
 _encBk(std::make_shared<MagneticPotEncoder>(-35, 1, 4)),
-_rotFR(std::make_shared<MotorLink>("rotFr", std::make_shared<Talon>(1, 8), _encFR, std::make_shared<LinearAngleTarget>(.40, 4, 0.005))), //OFFSET: -55 DEG
-_rotFL(std::make_shared<MotorLink>("rotFL", std::make_shared<Talon>(1, 9), _encFL, std::make_shared<LinearAngleTarget>(.40, 4, 0.005))), //OFFSET: -18 DEG
-_rotBk(std::make_shared<MotorLink>("rotBk", std::make_shared<Talon>(1, 7), _encBk, std::make_shared<LinearAngleTarget>(.40, 4, 0.005))), //OFFSET: -10 DEG
-_drvFR(std::make_shared<MotorLink>("drvFr", std::make_shared<Talon>(1, 1))),
-_drvFL(std::make_shared<MotorLink>("drvFl", std::make_shared<Talon>(1, 2))),
-_drvBk(std::make_shared<MotorLink>("drvBk", std::make_shared<Talon>(1, 3))),
-_mShooter(std::make_shared<MotorLink>("mShooter", std::make_shared<Talon>(1, 4))),
-_mArmRoll(std::make_shared<MotorLink>("mArmRoll", std::make_shared<Talon>(1, 5))),
-_mArmMove(std::make_shared<MotorLink>("mArmMove", std::make_shared<Talon>(1, 6))),
+_rotFR(std::make_shared<MotorLink>("rotFr", std::make_shared<Talon>(6, 8), _encFR, std::make_shared<LinearAngleTarget>(.40, 4, 0.005))), //OFFSET: -55 DEG
+_rotFL(std::make_shared<MotorLink>("rotFL", std::make_shared<Talon>(6, 9), _encFL, std::make_shared<LinearAngleTarget>(.40, 4, 0.005))), //OFFSET: -18 DEG
+_rotBk(std::make_shared<MotorLink>("rotBk", std::make_shared<Talon>(6, 7), _encBk, std::make_shared<LinearAngleTarget>(.40, 4, 0.005))), //OFFSET: -10 DEG
+_drvFR(std::make_shared<MotorLink>("drvFr", std::make_shared<Talon>(6, 1))),
+_drvFL(std::make_shared<MotorLink>("drvFl", std::make_shared<Talon>(6, 2))),
+_drvBk(std::make_shared<MotorLink>("drvBk", std::make_shared<Talon>(6, 3))),
+_mShooter(std::make_shared<MotorLink>("mShooter", std::make_shared<Talon>(6, 4))),
+_mArmRoll(std::make_shared<MotorLink>("mArmRoll", std::make_shared<Talon>(6, 5))),
+_mArmMove(std::make_shared<MotorLink>("mArmMove", std::make_shared<Talon>(6, 6))),
 _cockShooter(std::make_shared<CockArm>(_shooterTSensor, _mShooter)),
-_redLights(std::make_shared<RelayLink>(std::make_shared<Relay>(1, 1))),
-_blueLights(std::make_shared<RelayLink>(std::make_shared<Relay>(1, 2))),
-_camLights(std::make_shared<RelayLink>(std::make_shared<Relay>(1, 3))),
+_redLights(std::make_shared<RelayLink>(std::make_shared<Relay>(4, 1))),
+_blueLights(std::make_shared<RelayLink>(std::make_shared<Relay>(4, 2))),
+_camLights(std::make_shared<RelayLink>(std::make_shared<Relay>(4, 3))),
 _listenerManager(std::make_shared<Joystick>(Options::instance()._controllerPort)),
-_swerveDrive(std::make_shared<SwerveDrive>(_gyr, _rotFR, _rotFL, _rotBk, _drvFR, _drvFL, _drvBk, _listenerManager))
+_swerveDrive(new SwerveDrive(_gyr, _rotFR, _rotFL, _rotBk, _drvFR, _drvFL, _drvBk, _listenerManager))
 {
 
 }
@@ -69,7 +70,7 @@ void Global::initializeDisabled()
 
 void Global::initializeAuto()
 {
-	AutoConfig::initialize(*this);
+	std::thread(&AutoConfig::initialize, boost::ref(*this)).detach();
 }
 
 void Global::initializeTeleop()

@@ -27,7 +27,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.658668967" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler">
 								<option id="gnu.cpp.compiler.option.optimization.level.1261544349" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.debugging.level.1193838890" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.other.other.729284227" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-Wno-unused-local-typedefs -c -fmessage-length=0 --std=gnu++11" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.other.other.729284227" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-Wno-unused-local-typedefs -c -fmessage-length=0 -fdiagnostics-show-option" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.include.paths.1526212791" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/libeurointroduction/src}&quot;"/>
 									<listOptionValue builtIn="false" value="/usr/include/boost_1_54_0"/>
@@ -37,16 +37,17 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.1809060551" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="HOST_BUILD"/>
+									<listOptionValue builtIn="false" value="__cplusplus=201103L"/>
 								</option>
+								<option id="gnu.cpp.compiler.option.optimization.flags.411249283" name="Other optimization flags" superClass="gnu.cpp.compiler.option.optimization.flags" value="-Og" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.dialect.std.1205000507" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.dialect.flags.623619223" name="Other dialect flags" superClass="gnu.cpp.compiler.option.dialect.flags" value="--std=gnu++1y" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1533403122" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.741114075" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker"/>
 							<tool id="cdt.managedbuild.tool.gnu.cross.cpp.linker.778863685" name="Cross G++ Linker" superClass="cdt.managedbuild.tool.gnu.cross.cpp.linker">
 								<option id="gnu.cpp.link.option.libs.2086554585" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="boost_thread"/>
-									<listOptionValue builtIn="false" value="joystick"/>
 									<listOptionValue builtIn="false" value="rt"/>
-									<listOptionValue builtIn="false" value="boost_system"/>
 									<listOptionValue builtIn="false" value="pthread"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1041662056" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
@@ -61,7 +62,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src/tests/Mock/JoystickMock.cpp|src/tests/ListenerManagerTest.cpp|src/tests/CmdTimerMultiplexTest.cpp|src/tests/CmdTimerTest.cpp|src/tests/UnitTests.cpp|src/tests/CmdProcessorTest.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/tests|src/CrioTest.cpp|src/tests/Mock/JoystickMock.cpp|src/tests/ListenerManagerTest.cpp|src/tests/CmdTimerMultiplexTest.cpp|src/tests/CmdTimerTest.cpp|src/tests/UnitTests.cpp|src/tests/CmdProcessorTest.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -100,6 +101,9 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/wpilib}&quot;"/>
 								</option>
+								<option id="gnu.cpp.compiler.option.preprocessor.def.614882267" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="__cplusplus=201311L"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.782523439" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.1657062898" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker"/>
@@ -116,7 +120,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="tests/Mock/JoystickMock.cpp|tests/ListenerManagerTest.cpp|tests/UnitTests.cpp|tests/CmdTimerMultiplexTest.cpp|tests/CmdProcessorTest.cpp|tests/CmdTimerTest.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="tests|CrioTest.cpp|tests/Mock/JoystickMock.cpp|tests/ListenerManagerTest.cpp|tests/UnitTests.cpp|tests/CmdTimerMultiplexTest.cpp|tests/CmdProcessorTest.cpp|tests/CmdTimerTest.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -160,6 +164,7 @@
 								<option id="gnu.cpp.compiler.option.preprocessor.def.1361365520" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="UNIT_TEST"/>
 									<listOptionValue builtIn="false" value="HOST_BUILD"/>
+									<listOptionValue builtIn="false" value="__cplusplus=201311L"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.199827979" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
@@ -185,7 +190,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src/RobotTemplate.cpp|src/FRC-3128-2015.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/CrioTest.cpp|src/RobotTemplate.cpp|src/FRC-3128-2015.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -215,8 +220,8 @@
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.726068714" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool command="powerpc-wrs-vxworks-g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.55724134" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler">
-								<option id="gnu.cpp.compiler.option.optimization.level.463707249" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.debugging.level.144190779" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.optimization.level.463707249" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.more" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.debugging.level.144190779" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.other.other.415112501" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-nostdlib -Wno-unused-local-typedefs -c -fdiagnostics-color=auto -fmessage-length=0 --std=gnu++11 -mcpu=603 -mstrict-align -mlongcall" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.include.paths.1005218612" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/libeurointroduction/src}&quot;"/>
@@ -228,18 +233,18 @@
 									<listOptionValue builtIn="false" value="CPU=PPC603"/>
 									<listOptionValue builtIn="false" value="TOOL_FAMILY=gnu"/>
 									<listOptionValue builtIn="false" value="TOOL=gnu"/>
+									<listOptionValue builtIn="false" value="__cplusplus=201311L"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.undef.1319595139" name="Undefined symbols (-U)" superClass="gnu.cpp.compiler.option.preprocessor.undef" valueType="undefDefinedSymbols">
 									<listOptionValue builtIn="false" value="__linux"/>
 									<listOptionValue builtIn="false" value="__linux__"/>
 								</option>
+								<option id="gnu.cpp.compiler.option.dialect.std.201299898" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.2060472537" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.382909555" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker"/>
 							<tool command="powerpc-wrs-vxworks-g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.tool.gnu.cross.cpp.linker.90106667" name="Cross G++ Linker" superClass="cdt.managedbuild.tool.gnu.cross.cpp.linker">
 								<option id="gnu.cpp.link.option.libs.976449151" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="boost_thread"/>
-									<listOptionValue builtIn="false" value="boost_system"/>
 									<listOptionValue builtIn="false" value="wpilib"/>
 									<listOptionValue builtIn="false" value="supc++"/>
 									<listOptionValue builtIn="false" value="stdc++"/>
@@ -262,7 +267,81 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src/tests/Mock/JoystickMock.cpp|src/wpilib/Error.cpp|src/WPIMock.cpp|src/tests/ListenerManagerTest.cpp|src/tests/CmdTimerMultiplexTest.cpp|src/tests/CmdTimerTest.cpp|src/tests/UnitTests.cpp|src/tests/CmdProcessorTest.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/tests|src/CrioTest.cpp|src/tests/Mock/JoystickMock.cpp|src/wpilib/Error.cpp|src/WPIMock.cpp|src/tests/ListenerManagerTest.cpp|src/tests/CmdTimerMultiplexTest.cpp|src/tests/CmdTimerTest.cpp|src/tests/UnitTests.cpp|src/tests/CmdProcessorTest.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+		<cconfiguration id="cdt.managedbuild.config.gnu.cross.exe.debug.2025803354.790460859">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.cross.exe.debug.2025803354.790460859" moduleId="org.eclipse.cdt.core.settings" name="Test Harness">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="requires WPILibTestHarness" id="cdt.managedbuild.config.gnu.cross.exe.debug.2025803354.790460859" name="Test Harness" parent="cdt.managedbuild.config.gnu.cross.exe.debug">
+					<folderInfo id="cdt.managedbuild.config.gnu.cross.exe.debug.2025803354.790460859." name="/" resourcePath="">
+						<toolChain id="cdt.managedbuild.toolchain.gnu.cross.exe.debug.1532624723" name="Cross GCC" superClass="cdt.managedbuild.toolchain.gnu.cross.exe.debug">
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.targetPlatform.gnu.cross.1091393954" isAbstract="false" osList="all" superClass="cdt.managedbuild.targetPlatform.gnu.cross"/>
+							<builder buildPath="${workspace_loc:/FRC-3128-2015}/Debug" id="cdt.managedbuild.builder.gnu.cross.549528923" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="cdt.managedbuild.builder.gnu.cross"/>
+							<tool id="cdt.managedbuild.tool.gnu.cross.c.compiler.322085600" name="Cross GCC Compiler" superClass="cdt.managedbuild.tool.gnu.cross.c.compiler">
+								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.option.optimization.level.182543885" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" valueType="enumerated"/>
+								<option id="gnu.c.compiler.option.debugging.level.1005572241" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
+								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.180353658" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.1657033498" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler">
+								<option id="gnu.cpp.compiler.option.optimization.level.105221560" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.debugging.level.2124826184" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.other.other.595386021" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-Wno-unused-local-typedefs -c -fmessage-length=0 -fdiagnostics-show-option" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.include.paths.1770762868" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="/usr/include/wpiharness"/>
+									<listOptionValue builtIn="false" value="/usr/include/wpiharness/WPILib"/>
+									<listOptionValue builtIn="false" value="/usr/include/boost_1_54_0"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/libeurointroduction}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/libeurointroduction/EzLogger}&quot;"/>
+								</option>
+								<option id="gnu.cpp.compiler.option.preprocessor.def.1900689855" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="__cplusplus=201103L"/>
+								</option>
+								<option id="gnu.cpp.compiler.option.optimization.flags.295508605" name="Other optimization flags" superClass="gnu.cpp.compiler.option.optimization.flags" value="-Og" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.dialect.std.480597014" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.dialect.flags.112597312" name="Other dialect flags" superClass="gnu.cpp.compiler.option.dialect.flags" value="--std=gnu++1y" valueType="string"/>
+								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.410294602" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.638501457" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker"/>
+							<tool id="cdt.managedbuild.tool.gnu.cross.cpp.linker.107947948" name="Cross G++ Linker" superClass="cdt.managedbuild.tool.gnu.cross.cpp.linker">
+								<option id="gnu.cpp.link.option.libs.264213061" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" value="WPILibTestHarness"/>
+									<listOptionValue builtIn="false" value="eurointroduction"/>
+									<listOptionValue builtIn="false" value="boost_system"/>
+									<listOptionValue builtIn="false" value="wx_baseu-2.8"/>
+									<listOptionValue builtIn="false" value="wx_gtk2u_xrc-2.8"/>
+									<listOptionValue builtIn="false" value="wx_gtk2u_adv-2.8 "/>
+									<listOptionValue builtIn="false" value="wx_gtk2u_core-2.8"/>
+									<listOptionValue builtIn="false" value="rt"/>
+									<listOptionValue builtIn="false" value="pthread"/>
+								</option>
+								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1973639107" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
+									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+								</inputType>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.cross.archiver.293032270" name="Cross GCC Archiver" superClass="cdt.managedbuild.tool.gnu.cross.archiver"/>
+							<tool id="cdt.managedbuild.tool.gnu.cross.assembler.8941114" name="Cross GCC Assembler" superClass="cdt.managedbuild.tool.gnu.cross.assembler">
+								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.646720360" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
+					<sourceEntries>
+						<entry excluding="src/wpilib|src/WPIMock.cpp|src/tests|src/CrioTest.cpp|src/tests/Mock/JoystickMock.cpp|src/tests/ListenerManagerTest.cpp|src/tests/CmdTimerMultiplexTest.cpp|src/tests/CmdTimerTest.cpp|src/tests/UnitTests.cpp|src/tests/CmdProcessorTest.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -287,20 +366,26 @@
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.debug.2025803354.1906190736;cdt.managedbuild.config.gnu.cross.exe.debug.2025803354.1906190736.;cdt.managedbuild.tool.gnu.cross.cpp.compiler.55724134;cdt.managedbuild.tool.gnu.cpp.compiler.input.2060472537">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
 		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.debug.2025803354.1906190736.1187076738;cdt.managedbuild.config.gnu.cross.exe.debug.2025803354.1906190736.1187076738.;cdt.managedbuild.tool.gnu.cross.cpp.compiler.2072391587;cdt.managedbuild.tool.gnu.cpp.compiler.input.194923113">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.debug.2025803354;cdt.managedbuild.config.gnu.cross.exe.debug.2025803354.;cdt.managedbuild.tool.gnu.cross.c.compiler.1492098363;cdt.managedbuild.tool.gnu.c.compiler.input.1558548070">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.debug.2025803354.1935288207;cdt.managedbuild.config.gnu.cross.exe.debug.2025803354.1935288207.;cdt.managedbuild.tool.gnu.cross.c.compiler.761897038;cdt.managedbuild.tool.gnu.c.compiler.input.274855295">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.debug.2025803354;cdt.managedbuild.config.gnu.cross.exe.debug.2025803354.;cdt.managedbuild.tool.gnu.cross.cpp.compiler.658668967;cdt.managedbuild.tool.gnu.cpp.compiler.input.1533403122">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.debug.2025803354.1935288207;cdt.managedbuild.config.gnu.cross.exe.debug.2025803354.1935288207.;cdt.managedbuild.tool.gnu.cross.c.compiler.761897038;cdt.managedbuild.tool.gnu.c.compiler.input.274855295">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.debug.2025803354.1935288207;cdt.managedbuild.config.gnu.cross.exe.debug.2025803354.1935288207.;cdt.managedbuild.tool.gnu.cross.cpp.compiler.1993518498;cdt.managedbuild.tool.gnu.cpp.compiler.input.199827979">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.release.1972609515;cdt.managedbuild.config.gnu.cross.exe.release.1972609515.;cdt.managedbuild.tool.gnu.cross.cpp.compiler.759316857;cdt.managedbuild.tool.gnu.cpp.compiler.input.782523439">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.debug.2025803354.1906190736.1187076738;cdt.managedbuild.config.gnu.cross.exe.debug.2025803354.1906190736.1187076738.;cdt.managedbuild.tool.gnu.cross.c.compiler.1236766198;cdt.managedbuild.tool.gnu.c.compiler.input.388609667">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.cross.exe.debug.2025803354.1906190736;cdt.managedbuild.config.gnu.cross.exe.debug.2025803354.1906190736.;cdt.managedbuild.tool.gnu.cross.c.compiler.852647753;cdt.managedbuild.tool.gnu.c.compiler.input.726068714">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>

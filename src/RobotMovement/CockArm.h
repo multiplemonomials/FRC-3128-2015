@@ -6,9 +6,8 @@
 
 #ifndef COCKARM_H_
 #define COCKARM_H_
-
-#include <boost/thread/mutex.hpp>
 #include <DigitalInput.h>
+#include <mutex>
 
 #include <HardwareLink/Motor/MotorLink.h>
 #include <EventManager/CmdTimerPosix.h>
@@ -23,7 +22,7 @@ class CockArm
 
     std::shared_ptr<MotorLink> _mShooter;
 
-    boost::mutex _mutex;
+    std::mutex _mutex;
 
     CmdTimerPosix _timer;
 

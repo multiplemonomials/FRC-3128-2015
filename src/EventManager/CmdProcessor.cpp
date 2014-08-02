@@ -1,6 +1,7 @@
 #include "CmdProcessor.h"
 
 #include <LogMacros.h>
+#include <InterruptibleWait/ThreadInterruptedException.h>
 
 //NOTE: This file has been modified from a library written by Randall Smith
 
@@ -12,7 +13,7 @@ CmdProcessor::CmdProcessor
 (
     std::string const &                 name
 )
-:   _name(name + "CmdProcessor"),
+:   _name(name),
     _queue(),
     _thread(&CmdProcessor::operator(), this, name)
 {
@@ -49,7 +50,7 @@ CmdProcessor::~CmdProcessor()
 void CmdProcessor::ShutDown()
 {
     // Enqueue the shutdown command.
-	 _queue.Interrupt();
+	_queue.Interrupt();
 
     LOG_INFO("CmdProcessor::ShutDown(): Shutting down thread '" << _name << "'.");
 }
@@ -65,7 +66,7 @@ void CmdProcessor::operator()
     std::string                         threadName
 )
 {
-	LOG_INFO("Thread " << threadName << " starting up");
+	LOG_DEBUG("Thread " << threadName << " starting up");
 
     // Keep processing until told to stop (see ShutDownHandler()).
     do
@@ -79,6 +80,7 @@ void CmdProcessor::operator()
         //thread shutdown signal
         catch(ThreadInterruptedException & interrupt)
         {
+        	LOG_DEBUG("Thread " << threadName << " shutting down");
         	return;
         }
         catch(std::exception & error)
