@@ -3,7 +3,7 @@
 #include "CmdTimerPosix.h"
 #include "Util/DefineZeroedStruct.h"
 #include <LogMacros.h>
-#include <Ptr/Ptr.h>
+#include <Util/Ptr.h>
 #include "CmdTimerMultiplex.h"
 #include <Exception.h>
 

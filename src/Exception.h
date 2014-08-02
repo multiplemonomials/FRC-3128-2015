@@ -61,12 +61,12 @@ struct RoboException :
  *
  *	catch(RoboException & error)
  *  {
- *  	BOOST_ERROR(GET_ROBOEXCPTION_MESSAGE(error));
+ *  	BOOST_ERROR(GET_ROBOEXCEPTION_MESSAGE(error));
  *  }
  *
  *---------------------------------------------------------------------------*/
 
-#define GET_ROBOEXCPTION_MESSAGE(error) (*(boost::get_error_info<ErrMsg>(error)))
+#define GET_ROBOEXCEPTION_MESSAGE(error) (*(boost::get_error_info<ErrMsg>(error)))
 
 
 /*-----------------------------------------------------------------------------

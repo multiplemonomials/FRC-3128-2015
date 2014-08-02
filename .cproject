@@ -29,12 +29,11 @@
 								<option id="gnu.cpp.compiler.option.debugging.level.1193838890" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.other.other.729284227" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-Wno-unused-local-typedefs -c -fmessage-length=0 --std=gnu++11" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.include.paths.1526212791" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/libeurointroduction/src}&quot;"/>
 									<listOptionValue builtIn="false" value="/usr/include/boost_1_54_0"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/wpilib/vxworks}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/libeurointroduction}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/wpilib}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/libeurointroduction/EzLogger}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.1809060551" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="HOST_BUILD"/>
@@ -96,11 +95,10 @@
 								<option id="gnu.cpp.compiler.option.debugging.level.1517309879" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.other.other.425914692" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-Wno-unused-local-typedefs -c -fmessage-length=0 --std=gnu++11" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.include.paths.1039780496" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/libeurointroduction/src}&quot;"/>
 									<listOptionValue builtIn="false" value="/usr/include/boost_1_54_0"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/libeurointroduction}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/wpilib}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/libeurointroduction/EzLogger}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.782523439" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
@@ -152,12 +150,12 @@
 								<option id="gnu.cpp.compiler.option.debugging.level.455909645" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.other.other.1913054038" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-Wno-unused-local-typedefs -c -fmessage-length=0 --std=gnu++11" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.include.paths.846444910" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/libeurointroduction/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="/usr/include/boost_1_54_0"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/wpilib/vxworks}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/libeurointroduction}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/wpilib}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/libeurointroduction/EzLogger}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.1361365520" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="UNIT_TEST"/>
@@ -221,11 +219,10 @@
 								<option id="gnu.cpp.compiler.option.debugging.level.144190779" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.other.other.415112501" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-nostdlib -Wno-unused-local-typedefs -c -fdiagnostics-color=auto -fmessage-length=0 --std=gnu++11 -mcpu=603 -mstrict-align -mlongcall" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.include.paths.1005218612" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/libeurointroduction/src}&quot;"/>
 									<listOptionValue builtIn="false" value="/usr/powerpc-wrs-vxworks/include/WPILib"/>
 									<listOptionValue builtIn="false" value="/usr/powerpc-wrs-vxworks/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/libeurointroduction}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/libeurointroduction/EzLogger}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.1284303817" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="CPU=PPC603"/>

@@ -13,7 +13,7 @@
 #include <WPILib.h>
 
 //master switch for the use of libjoystick to get real joystick values from usb
-#define LIBJOYSTICK_ENABLED
+//#define LIBJOYSTICK_ENABLED
 
 //port to connect to joystick on
 #define LIBJOYSTICK_PORT "/dev/input/js2"

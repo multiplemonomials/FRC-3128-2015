@@ -1,0 +1,3 @@
+[submodule "src/libeurointroduction"]
+	path = src/libeurointroduction
+	url = https://github.com/multiplemonomials/libeurointroduction.git

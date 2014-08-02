@@ -14,8 +14,7 @@ CmdProcessor::CmdProcessor
 )
 :   _name(name + "CmdProcessor"),
     _queue(),
-    _keepRunning(true),
-    _thread(boost::ref(*this), _name)
+    _thread(&CmdProcessor::operator(), this, name)
 {
     LOG_INFO("CmdProcessor(): Constructor completed for '" << _name << "'.");
 }
@@ -50,7 +49,7 @@ CmdProcessor::~CmdProcessor()
 void CmdProcessor::ShutDown()
 {
     // Enqueue the shutdown command.
-	 _thread.interrupt();
+	 _queue.Interrupt();
 
     LOG_INFO("CmdProcessor::ShutDown(): Shutting down thread '" << _name << "'.");
 }
@@ -78,7 +77,7 @@ void CmdProcessor::operator()
             (*cmdPtr)();
         }
         //thread shutdown signal
-        catch(boost::thread_interrupted & interrupt)
+        catch(ThreadInterruptedException & interrupt)
         {
         	return;
         }
@@ -87,7 +86,8 @@ void CmdProcessor::operator()
         	LOG_RECOVERABLE("Error processsing event: " << error.what())
         }
 
-    } while (_keepRunning);
+    }
+    while(true);
 
 }
 

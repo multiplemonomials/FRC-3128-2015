@@ -10,7 +10,7 @@
 #include "CmdProcessor.h"
 #include "CmdTimerPosix.h"
 #include <LogMacros.h>
-#include <Ptr/Ptr.h>
+#include <Util/Ptr.h>
 
 CmdTimerMultiplex::CmdTimerMultiplex()
 :_timerMap(),

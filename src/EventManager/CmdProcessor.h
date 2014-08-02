@@ -1,13 +1,15 @@
 #ifndef CMDPROCESSOR_H_
 #define CMDPROCESSOR_H_
 
-#include <boost/thread/thread.hpp>
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 #include <memory>
+#include <thread>
+#include <InterruptibleWait/ThreadInterruptedException.h>
 
 #include "ThreadSafeQueue/ThreadSafeQueue.h"
 #include "Cmd.h"
+
 
 //NOTE: This file has been modified from a library written by Randall Smith
 
@@ -33,14 +35,8 @@ class CmdProcessor
     ThreadSafeQueue<Cmd::SharedPtr>             _queue;
 
 
-    // True if the thread should continue running.
-    // Note: mutual exclusion not needed since it's only modified from
-    // a message handler executing in the thread.
-    bool                                        _keepRunning;
-
-
     // Thread.
-    boost::thread                               _thread;
+    std::thread                               _thread;
 
     // Cause the message processing loop to shut down.
     //

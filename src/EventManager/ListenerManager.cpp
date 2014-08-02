@@ -8,7 +8,7 @@
 #include <EventManager/ListenerManager.h>
 #include <LogMacros.h>
 #include <Util/Time.h>
-#include <FunctionTimer/functimer.hpp>
+#include <FunctionTimer/functimer.h>
 #include <Exception.h>
 
 #include <unordered_set>
@@ -215,7 +215,7 @@ void ListenerManager::operatorParenthesisImpl()
 			}
 			catch(RoboException & error)
 			{
-				LOG_RECOVERABLE("Caught a RoboException from a control listener: \n" << GET_ROBOEXCPTION_MESSAGE(error));
+				LOG_RECOVERABLE("Caught a RoboException from a control listener: \n" << GET_ROBOEXCEPTION_MESSAGE(error));
 			}
 			catch(...)
 			{
