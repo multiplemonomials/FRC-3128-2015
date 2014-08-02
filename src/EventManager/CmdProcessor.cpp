@@ -1,6 +1,7 @@
 #include "CmdProcessor.h"
 
 #include <LogMacros.h>
+#include <InterruptibleWait/ThreadInterruptedException.h>
 
 //NOTE: This file has been modified from a library written by Randall Smith
 
@@ -12,7 +13,7 @@ CmdProcessor::CmdProcessor
 (
     std::string const &                 name
 )
-:   _name(name + "CmdProcessor"),
+:   _name(name),
     _queue(),
     _keepRunning(true),
     _thread(&CmdProcessor::operator(), this, _name)
@@ -35,7 +36,7 @@ CmdProcessor::~CmdProcessor()
 
 
     // Wait for the thread to shut down.
-   // _thread.join();
+    _thread.join();
 
 
     LOG_INFO("~CmdProcessor(): Shut down thread '" << _name << "'.");
@@ -50,7 +51,7 @@ CmdProcessor::~CmdProcessor()
 void CmdProcessor::ShutDown()
 {
     // Enqueue the shutdown command.
-	 //_thread.interrupt();
+	_queue.Interrupt();
 
     LOG_INFO("CmdProcessor::ShutDown(): Shutting down thread '" << _name << "'.");
 }
@@ -66,7 +67,7 @@ void CmdProcessor::operator()
     std::string                         threadName
 )
 {
-	LOG_INFO("Thread " << threadName << " starting up");
+	LOG_DEBUG("Thread " << threadName << " starting up");
 
     // Keep processing until told to stop (see ShutDownHandler()).
     do
@@ -77,11 +78,12 @@ void CmdProcessor::operator()
             Cmd::SharedPtr  cmdPtr(_queue.Dequeue());
             (*cmdPtr)();
         }
-//        //thread shutdown signal
-//        catch(boost::thread_interrupted & interrupt)
-//        {
-//        	return;
-//        }
+        //thread shutdown signal
+        catch(ThreadInterruptedException & interrupt)
+        {
+        	LOG_DEBUG("Thread " << threadName << " shutting down");
+        	return;
+        }
         catch(std::exception & error)
         {
         	LOG_RECOVERABLE("Error processsing event: " << error.what())

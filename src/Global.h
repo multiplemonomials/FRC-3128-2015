@@ -8,7 +8,7 @@
 #ifndef GLOBAL_H_
 #define GLOBAL_H_
 
-#include <wpilib/WPILib.h>
+#include <WPILib.h>
 
 #include <HardwareLink/Motor/MotorLink.h>
 #include <HardwareLink/Motor/SpeedControl/LinearAngleTarget.h>

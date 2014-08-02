@@ -1,4 +1,3 @@
-
 //NOTE: This file has been modified from a library written by Randall Smith
 
 #ifndef TIME_H_
@@ -7,34 +6,34 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 
 /*-----------------------------------------------------------------------------
-    Very thin adaptor to bring the boost::posix_time stuff out in a more
-    concise, convenient, and easy to remember form (and hopefully with a lot
-    less time spent consulting the web site
+Very thin adaptor to bring the boost::posix_time stuff out in a more
+concise, convenient, and easy to remember form (and hopefully with a lot
+less time spent consulting the web site
 
-        http://www.boost.org/doc/libs/1_54_0/doc/html/date_time/posix_time.html
+http://www.boost.org/doc/libs/1_54_0/doc/html/date_time/posix_time.html
 
-    for particulars.)
+for particulars.)
 
-    No intention to re-do anything; should be interchangeable and interoperable
-    with the original Boost formulations.
- ----------------------------------------------------------------------------*/
+No intention to re-do anything; should be interchangeable and interoperable
+with the original Boost formulations.
+----------------------------------------------------------------------------*/
 
 struct Time
 {
     /*-----------------------------------------------------------------------------
-        Basic types.
-     ----------------------------------------------------------------------------*/
+Basic types.
+----------------------------------------------------------------------------*/
 
-    typedef boost::posix_time::ptime            Timepoint;
+    typedef boost::posix_time::ptime Timepoint;
 
-    typedef boost::posix_time::time_duration    Duration;
+    typedef boost::posix_time::time_duration Duration;
 
-    typedef boost::posix_time::time_period      Period;
+    typedef boost::posix_time::time_period Period;
 
 
     /*-----------------------------------------------------------------------------
-        Initialization.
-     ----------------------------------------------------------------------------*/
+Initialization.
+----------------------------------------------------------------------------*/
 
     static Duration Hours(long const & val)
     {
@@ -63,8 +62,8 @@ struct Time
 
 
     /*-----------------------------------------------------------------------------
-        Time of day.
-     ----------------------------------------------------------------------------*/
+Time of day.
+----------------------------------------------------------------------------*/
 
     // Get time of day in GMT.
     static Timepoint GetTime()
@@ -79,25 +78,25 @@ struct Time
     }
 
 
-//    /*-----------------------------------------------------------------------------
-//        Sleep.
-//     ----------------------------------------------------------------------------*/
+// /*-----------------------------------------------------------------------------
+// Sleep.
+// ----------------------------------------------------------------------------*/
 //
-//    // Sleep current thread for specified duration.
-//    static void Sleep(Duration const & duration)
-//    {
-//        boost::this_thread::sleep(duration);
-//    }
+// // Sleep current thread for specified duration.
+// static void Sleep(Duration const & duration)
+// {
+// boost::this_thread::sleep(duration);
+// }
 
 
     /*-----------------------------------------------------------------------------
-        String conversion.
-     ----------------------------------------------------------------------------*/
+String conversion.
+----------------------------------------------------------------------------*/
 
     // "Regular" strings.
 
     // To "2002-Jan-01 10:00:01.123456789"
-    // Note:  Does not alpha sort properly!
+    // Note: Does not alpha sort properly!
     static std::string ToString(Timepoint const & timepoint)
     {
         return boost::posix_time::to_simple_string(timepoint);

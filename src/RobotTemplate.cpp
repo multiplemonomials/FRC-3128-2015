@@ -10,7 +10,7 @@
 #include <initializer_list>
 #include <memory>
 #include <boost/date_time.hpp>
-#include <wpilib/WPILib.h>
+#include <WPILib.h>
 #include <thread>
 
 #include <LogMacros.h>
@@ -49,7 +49,7 @@ struct RobotTemplate
 
 	void RobotInit()
 	{
-		LOG_INFO("Welcome to the FRC Team 3128 Event System Version 2!")
+		std::cout << "Welcome to the FRC Team 3128 Event System Version 2!" << std::endl;
 		_global.initializeRobot();
 	}
 
@@ -132,6 +132,8 @@ int main()
 	robotTemplate.TeleopInit();
 	robotTemplate.TeleopPeriodic();
 	std::cin.get();
+
+	std::cout << __cplusplus;
 
 	return 0;
 }
