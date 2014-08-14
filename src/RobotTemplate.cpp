@@ -49,7 +49,7 @@ struct RobotTemplate
 
 	void RobotInit()
 	{
-		std::cout << "Welcome to the FRC Team 3128 Event System Version 2!" << std::endl;
+		std::cout << "Welcome to the FRC Team 3128 System Version 2!" << std::endl;
 		_global.initializeRobot();
 	}
 

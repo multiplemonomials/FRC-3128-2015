@@ -18,6 +18,7 @@
 #include <RobotMovement/CockArm.h>
 #include <EventManager/ListenerManager.h>
 #include <RobotMovement/SwerveDrive.h>
+#include <RobotMovement/TankDrive.h>
 
 class Global
 {
@@ -52,7 +53,10 @@ public:
 	ListenerManager _listenerManager;
 
 	///manages all three swerve modules (one drive motor and one steering motor each)
-	std::shared_ptr<SwerveDrive> _swerveDrive;
+	//std::shared_ptr<SwerveDrive> _swerveDrive;
+
+	///controls two tank drive motors
+	std::shared_ptr<TankDrive> _tankDrive;
 
 	///massive constructor which boots up the robot
 	Global();

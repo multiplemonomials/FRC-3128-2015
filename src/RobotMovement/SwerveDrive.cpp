@@ -59,7 +59,7 @@ _cmdProcessor("SwerveDriveCmdProcessor")
 
 void SwerveDrive::steer()
 {
-	Cmd::MakeShared(&SwerveDrive::steerHandler, boost::ref(*this));
+	_cmdProcessor.Enqueue(&SwerveDrive::steerHandler, boost::ref(*this));
 }
 
 SwerveDrive::~SwerveDrive()

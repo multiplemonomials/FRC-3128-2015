@@ -37,7 +37,8 @@ _redLights(std::make_shared<RelayLink>(std::make_shared<Relay>(4, 1))),
 _blueLights(std::make_shared<RelayLink>(std::make_shared<Relay>(4, 2))),
 _camLights(std::make_shared<RelayLink>(std::make_shared<Relay>(4, 3))),
 _listenerManager(std::make_shared<Joystick>(Options::instance()._controllerPort)),
-_swerveDrive(new SwerveDrive(_gyr, _rotFR, _rotFL, _rotBk, _drvFR, _drvFL, _drvBk, _listenerManager))
+_tankDrive(std::make_shared<TankDrive>(_drvFL, _drvFR, _listenerManager))
+//_swerveDrive(new SwerveDrive(_gyr, _rotFR, _rotFL, _rotBk, _drvFR, _drvFL, _drvBk, _listenerManager))
 {
 
 }
@@ -105,9 +106,12 @@ void Global::initializeTeleop()
 
     _listenerManager.addListener(Listenable::STARTDOWN, Cmd::MakeShared(&CockArm::startArmCock, boost::ref(*_cockShooter)));
 
-    _listenerManager.addListener(Listenable::JOY1X, Cmd::MakeShared(&SwerveDrive::steer, boost::ref(*_swerveDrive)));
-    _listenerManager.addListener(Listenable::JOY1Y, Cmd::MakeShared(&SwerveDrive::steer, boost::ref(*_swerveDrive)));
-    _listenerManager.addListener(Listenable::JOY2X, Cmd::MakeShared(&SwerveDrive::steer, boost::ref(*_swerveDrive)));
+    _listenerManager.addListener(Listenable::JOY1X, Cmd::MakeShared(&TankDrive::steer, boost::ref(*_tankDrive)));
+    _listenerManager.addListener(Listenable::JOY1Y, Cmd::MakeShared(&TankDrive::steer, boost::ref(*_tankDrive)));
+
+    //_listenerManager.addListener(Listenable::JOY1X, Cmd::MakeShared(&SwerveDrive::steer, boost::ref(*_swerveDrive)));
+    //_listenerManager.addListener(Listenable::JOY1Y, Cmd::MakeShared(&SwerveDrive::steer, boost::ref(*_swerveDrive)));
+    //_listenerManager.addListener(Listenable::JOY2X, Cmd::MakeShared(&SwerveDrive::steer, boost::ref(*_swerveDrive)));
 }
 
 void Global::robotStop()
