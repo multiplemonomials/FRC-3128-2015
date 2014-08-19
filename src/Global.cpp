@@ -14,7 +14,7 @@
 #include <EzLogger/output/LogOutput.h>
 #include <Util/AutoConfig.h>
 #include <HardwareLink/LightChangeEvent.h>
-#include <bits/shared_ptr.h>
+#include <memory>
 
 
 Global::Global()
