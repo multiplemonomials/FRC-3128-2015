@@ -18,7 +18,7 @@
 #include <RobotMovement/CockArm.h>
 #include <EventManager/ListenerManager.h>
 #include <RobotMovement/SwerveDrive.h>
-#include <RobotMovement/TankDrive.h>
+#include <RobotMovement/ArcadeDrive.h>
 
 class Global
 {
@@ -56,7 +56,7 @@ public:
 	//std::shared_ptr<SwerveDrive> _swerveDrive;
 
 	///controls two tank drive motors
-	std::shared_ptr<TankDrive> _tankDrive;
+	std::shared_ptr<ArcadeDrive> _tankDrive;
 
 	///massive constructor which boots up the robot
 	Global();

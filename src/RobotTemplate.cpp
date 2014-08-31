@@ -22,7 +22,7 @@
 #include <EzLogger/output/LogOutput.h>
 
 //The _start function is needed because of a bug in the ppc toolchain's linker script, which generates
-//a reference to __start even though it is not needed
+//a reference to _start even though it is not needed
 #ifdef __VXWORKS__
 extern "C" {
 void _start() {
@@ -38,9 +38,7 @@ void __assert(const char* message)
 #endif
 
 struct RobotTemplate
-#ifndef HOST_BUILD //make things a little easier in the wpimock file
 : public IterativeRobot
-#endif
 {
 	bool autonomousHasBeenInit = false;
 	bool teleopHasBeenInit = false;
@@ -55,6 +53,7 @@ struct RobotTemplate
 
 	void DisabledInit()
 	{
+		std::cout << "Initializing Disabled" << std::endl;
 		_global.initializeDisabled();
 	}
 
@@ -62,6 +61,8 @@ struct RobotTemplate
     {
         if(!autonomousHasBeenInit)
         {
+    		std::cout << "Initializing Auto" << std::endl;
+
             _global._listenerManager.removeAllListeners();
         	_global.initializeAuto();
             autonomousHasBeenInit = true;
@@ -73,6 +74,8 @@ struct RobotTemplate
     {
         if(!teleopHasBeenInit)
         {
+    		std::cout << "Initializing Teleop" << std::endl;
+
         	_global._listenerManager.removeAllListeners();
         	_global.initializeTeleop();
             teleopHasBeenInit = true;
@@ -82,60 +85,20 @@ struct RobotTemplate
 
     void DisabledPeriodic()
     {
-#ifndef HOST_BUILD
         GetWatchdog().Feed();
-#endif
     }
 
     void AutonomousPeriodic()
     {
-#ifndef HOST_BUILD
         GetWatchdog().Feed();
-#endif
         std::this_thread::sleep_for(std::chrono::milliseconds(150));
     }
 
     void TeleopPeriodic()
     {
-#ifndef HOST_BUILD
-        GetWatchdog().Feed();
-#endif
         std::this_thread::sleep_for(std::chrono::milliseconds(150));
     }
 
 };
 
-#ifndef HOST_BUILD
 START_ROBOT_CLASS(RobotTemplate);
-#endif
-
-#ifdef HOST_BUILD
-int main()
-{
-
-	LogCore::instance().addOutput("stdout", std::make_shared<LogOutput<BasicAcceptor, CondensedFormatter, BasicWriter>>());
-
-	RobotTemplate robotTemplate;
-
-	robotTemplate.RobotInit();
-
-	std::cout << "*** Main: Autonomous Running..." << std::endl;
-	robotTemplate.AutonomousInit();
-	robotTemplate.AutonomousPeriodic();
-	std::cin.get();
-
-	std::cout << "*** Main: Disabled Running..." << std::endl;
-	robotTemplate.DisabledInit();
-	robotTemplate.DisabledPeriodic();
-
-	std::cout << "*** Main: Teleop Running..." << std::endl;
-	robotTemplate.TeleopInit();
-	robotTemplate.TeleopPeriodic();
-	std::cin.get();
-
-	std::cout << __cplusplus;
-
-	return 0;
-}
-
-#endif

@@ -15,7 +15,8 @@
 
 #include "CmdProcessor.h"
 #include "Cmd.h"
-#include "CmdTimerPosix.h"
+#include "CmdTimerSelector.h"
+#include "InterruptibleWait/InterruptibleWaiter.h"
 
 //This class combines the functions of XControl and ListenerManager.
 //It is constructed with one Joystick object, which confusingly seems
@@ -66,7 +67,11 @@ public:
 
 private:
 
-	std::mutex _mutex;
+	//when this is locked no one should touch _joystickValues or _buttonValues
+	std::mutex _controlValuesMutex;
+
+	//when this is locked no one should touch _listeners
+	std::mutex _listenersMutex;
 
 	typedef std::unordered_multimap<Listenable, listenerFunctionType, std::hash<int>> ListenerMapType;
 
@@ -80,11 +85,9 @@ private:
 
 	std::vector<bool> _buttonValues;
 
-	//serializes multithreaded input
-	CmdProcessor _cmdProcessor;
+	InterruptibleWaiter _waiter;
 
-	//timer for thread which polls the joystick and calls listeners if the values change
-	CmdTimerPosix _threadTimer;
+	std::thread _thread;
 
 	//not assignable
 	void operator=(ListenerManager) =  delete;
@@ -94,21 +97,13 @@ private:
 
 	std::pair<std::vector<bool>, std::vector<double>> pollControls();
 
-	//run polling function via _cmdProcessor
-	void operator()()
-	{
-		_cmdProcessor.EnqueueFront(&ListenerManager::operatorParenthesisImpl, boost::ref(*this));
-	}
-
-	//...
-	void operatorParenthesisImpl();
-	//Come on, don't tell me you didn't laugh a little inside
-
 	void addListenerImpl(Listenable key, ListenerMapType::mapped_type listener);
 
 	void removeAllListenersForControlImpl(Listenable listener);
 
 	void removeAllListenersImpl();
+
+	void run();
 
 public:
 
@@ -117,24 +112,17 @@ public:
 
 	//add listener for given listenable
 	//multiple listeners can be added for the same listenable
-	void addListener(Listenable key, ListenerMapType::mapped_type listener)
-	{
-		_cmdProcessor.Enqueue(&ListenerManager::addListenerImpl, boost::ref(*this), key, listener);
-	}
+	void addListener(Listenable key, ListenerMapType::mapped_type listener);
 
 	//remove all listeners set for the given listener
-	void removeAllListenersForControl(Listenable listener)
-	{
-		_cmdProcessor.Enqueue(&ListenerManager::removeAllListenersForControlImpl, boost::ref(*this), listener);
-	}
+	//note that removeAllListenersForControl(AUP) is NOT the same as removeAllListenersForControl(ADOWN)
+	void removeAllListenersForControl(Listenable listener);
 
 	//remove all listeners, period
-	void removeAllListeners()
-	{
-		_cmdProcessor.Enqueue(&ListenerManager::removeAllListenersImpl, boost::ref(*this));
-	}
+	void removeAllListeners();
 
 	//returns the boolean value of a button listenable (between A and R3).
+	//returns true if presses whether $buttonUP or $buttonDOWN was given
 	//Does bounds checking, throws if value is out of range.
 	bool getRawBool(Listenable listenable);
 

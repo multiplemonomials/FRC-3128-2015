@@ -9,20 +9,33 @@
 #define CMDTIMERWIN32_H_
 
 #include "CmdTimer.h"
-#include <windows.h>
+#include "CmdTimerMultiplex.h"
 
+#include <windows.h>
+#include <set>
+#include <map>
+
+/**
+ * This class is used to execute a Cmd at a certain time, either relative or absolute.
+ * It is the other half of the CmdTimer interface, used to work with Windows timers.
+ * Compared to the Posix one, it is more resource-intensive to create, but much easier to kill.
+ * Lastly, the resolution is 10ms and there can be exactly 4,294,967,295 ((max value of an uint32_t) - 1) timers running at the same time.
+ */
 class CmdTimerWin32 : public CmdTimer
 {
- class CmdTimerWin32Impl : public CmdTimerImpl
+ class CmdTimerWin32Impl : public CmdTimerImpl, public std::enable_shared_from_this<CmdTimerWin32Impl>
  {
 	 	static UINT_PTR guaranteedUnusedID;
 
-	 	//see, the problem with the timer ID's is that, while one is randomly generated each time we call SetTimer(),
+	 	//see, the problem with the timer ID's is that, while one is randomly generated each time we call SetTimer(), if
 	 	//we pass one that is already used to the OS, instead of creating a new timer it will overwrite the settings for that one.
 	 	//so we need to carefully map all of the used ID's and make sure
-	 	static std::set<UINT_PTR>
+	 	//that we never use the same one twice
+	 	static std::set<UINT_PTR> _usedIDs;
 
-	 	static std::map<UINT_PTR, std::shared_ptr<CmdTimerMultiplex>;
+	 	static std::map<UINT_PTR, std::shared_ptr<CmdTimerWin32Impl>> _idToTimerMap;
+
+	 	static std::mutex _mapMutex;
 
         //multiplex to report to when timer goes off
         //can be nullptr, which means no multiplex
@@ -33,29 +46,15 @@ class CmdTimerWin32 : public CmdTimer
     private:
 
         // Handle to our timer instance being maintained by the O/S.
-        UINT_PTR                                             _timerId;
+        UINT_PTR                                             _timerID;
 
-
-        // Create an O/S timer (wrap Linux gunk).
-        void TimerCreate();
-
-
-        // Set an O/S timer (wrap Linux gunk).
-        // Timer expires this many seconds/nanoseconds from now.  Providing zero
-        // values cancels the timer.
-        void TimerSetTime
-        (
-            time_t const &  seconds,
-            long const &    nanoseconds
-        );
-
-
-        // Create an O/S timer (wrap Linux gunk).
-        void TimerDelete();
+        // Set an O/S timer (wrap Win32 gunk).
+        // Timer expires this many milliseconds from now
+        void TimerSetTime(UINT const & milliseconds);
 
 
         // Static handler function that is invoked by (all) CmdTimerWin32Impl timers.
-        static void TimerHandler(HWND windowHandle, UINT uMsg, UINT_PTR idEvent, DWORD elapsedTime);
+        static void CALLBACK TimerHandler(HWND windowHandle, UINT uMsg, UINT_PTR idEvent, DWORD elapsedTime);
 
         //called by TimerHandler when timer fires
         //either executes command or
@@ -65,17 +64,17 @@ class CmdTimerWin32 : public CmdTimer
 
     public:
 
-        // Ctor. (with multiplex)
-        explicit CmdTimerWin32Impl(Cmd::SharedPtr command, std::shared_ptr<CmdTimerMultiplex> multiplex);
+        // Ctor.
+        explicit CmdTimerWin32Impl(Cmd::SharedPtr command, Time::Duration timeRelative);
 
-        // Ctor. (without multiplex)
+        // Ctor.
         explicit CmdTimerWin32Impl(Cmd::SharedPtr command);
 
         // Ctor.
         explicit CmdTimerWin32Impl();
 
         // Ctor.
-        explicit CmdTimerWin32Impl(CmdTimerMultiplex * command);
+        explicit CmdTimerWin32Impl(Cmd::SharedPtr command, std::shared_ptr<CmdTimerMultiplex> multiplex);
 
 
         // Copy ctor (non-copyable).
@@ -89,9 +88,6 @@ class CmdTimerWin32 : public CmdTimer
         // Dtor.
         ~CmdTimerWin32Impl();
 
-        //check with the OS if the timer is running
-        bool TimerIsRunning();
-
         // Specify the Cmd to execute when the timer expires.
         void SetCmd(Cmd::SharedPtr cmdToInvoke);
 
@@ -101,6 +97,12 @@ class CmdTimerWin32 : public CmdTimer
         	return _cmdToInvoke;
         }
 
+        //returns true if timer is running
+        bool TimerIsRunning()
+        {
+        	return _timerID != 0;
+        }
+
         // Starts the timer and sets it to trigger at a relative time
         void StartRelative(Time::Duration invocationDelay);
 
@@ -108,8 +110,7 @@ class CmdTimerWin32 : public CmdTimer
         // Starts the timer to trigger at an absolute time
         void StartAbsolute(Time::Timepoint invocationTime);
 
-
-        // Turns off the timer.  You CAN restart it with Start*() and have it trigger.
+        // Deletes this timer from the OS
         void Cancel();
     };
 
@@ -123,47 +124,43 @@ class CmdTimerWin32 : public CmdTimer
 
 public:
 
-    // Ctor. (with multiplex)
-    explicit CmdTimerWin32(Cmd::SharedPtr command, CmdTimerMultiplex * multiplex)
-    : _pImpl(new CmdTimerWin32Impl(command, multiplex))
+    // Ctor. (with multiplex and duration included)
+    //NOTE: Windows timers can't be set without a value.
+    //hopefully no one ever waits more than 100 seconds between creating a timer and setting it
+    explicit CmdTimerWin32(Cmd::SharedPtr command, Time::Duration timeRelative)
+    : _pImpl(new CmdTimerWin32Impl(command, timeRelative))
     {
 
     }
 
-    // Ctor. (without multiplex)
+    // Ctor. (with multiplex and duration included)
     explicit CmdTimerWin32(Cmd::SharedPtr command)
     : _pImpl(new CmdTimerWin32Impl(command))
     {
 
     }
 
-    // Ctor.
-    explicit CmdTimerWin32()
-    : _pImpl(new CmdTimerWin32Impl)
+    // Ctor. (with multiplex and duration included)
+    explicit CmdTimerWin32(Cmd::SharedPtr command, std::shared_ptr<CmdTimerMultiplex> multiplex)
+    : _pImpl(new CmdTimerWin32Impl(command, multiplex))
     {
 
     }
 
     // Ctor.
-    explicit CmdTimerWin32(std::shared_ptr<CmdTimerMultiplex> multiplex)
-    : _pImpl(new CmdTimerWin32Impl(multiplex))
+    explicit CmdTimerWin32()
+    : _pImpl(new CmdTimerWin32Impl())
     {
 
     }
 
 
     // Copy ctor (copyable).
-    CmdTimerWin32(const CmdTimerPosix&) = default;
+    CmdTimerWin32(const CmdTimerWin32&) = default;
 
 
     // Assignment operator (assignable).
-    CmdTimerPosix& operator=(const CmdTimerPosix&) = default;
-
-    //returns true if timer is running
-    bool TimerIsRunning()
-    {
-        return _pImpl->TimerIsRunning();
-    }
+    CmdTimerWin32& operator=(const CmdTimerWin32&) = default;
 
 
     // Specify the Cmd to execute when the timer expires.
@@ -201,6 +198,12 @@ public:
     virtual void Cancel()
     {
         _pImpl->Cancel();
+    }
+
+    //returns true if timer is running
+    bool TimerIsRunning()
+    {
+        return _pImpl->TimerIsRunning();
     }
 };
 

@@ -10,7 +10,7 @@
 #include <mutex>
 
 #include <HardwareLink/Motor/MotorLink.h>
-#include <EventManager/CmdTimerPosix.h>
+#include <EventManager/CmdTimerSelector.h>
 
 class CockArm
 {
@@ -24,7 +24,7 @@ class CockArm
 
     std::mutex _mutex;
 
-    CmdTimerPosix _timer;
+    PlatformCmdTimer _timer;
 
 	void execute();
 

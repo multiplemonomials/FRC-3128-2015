@@ -6,3 +6,4 @@ Crio Build
 /Doxygen
 /Test Harness
 *.orig
+/Windows Harness/

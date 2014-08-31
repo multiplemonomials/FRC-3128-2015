@@ -13,12 +13,13 @@
 #include "CmdTimer.h"
 #include <Util/Time.h>
 #include <mutex>
+#include <memory>
 
 /*
  * Each CmdTimer holds only one cmd, so this object
  * owns a horde of them and destroys them after they fire.
  */
-class CmdTimerMultiplex
+class CmdTimerMultiplex : public std::enable_shared_from_this<CmdTimerMultiplex>
 {
 public:
 

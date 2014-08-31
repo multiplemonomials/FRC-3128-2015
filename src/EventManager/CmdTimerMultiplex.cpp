@@ -8,7 +8,8 @@
 #include "CmdTimerMultiplex.h"
 
 #include "CmdProcessor.h"
-#include "CmdTimerPosix.h"
+#include "CmdTimerSelector.h"
+
 #include <LogMacros.h>
 #include <Util/Ptr.h>
 
@@ -21,8 +22,7 @@ CmdTimerMultiplex::CmdTimerMultiplex()
 
 void CmdTimerMultiplex::startTimer(Time::Duration time, Cmd::SharedPtr command)
 {
-	std::shared_ptr<CmdTimer> timer = std::make_shared<CmdTimerPosix>();
-	timer->SetCmd(command);
+	std::shared_ptr<CmdTimer> timer = std::make_shared<PlatformCmdTimer>(command, shared_from_this());
 	timer->StartRelative(time);
 
 	std::unique_lock<std::mutex> lock(_mutex);
@@ -31,8 +31,7 @@ void CmdTimerMultiplex::startTimer(Time::Duration time, Cmd::SharedPtr command)
 
 void CmdTimerMultiplex::startTimer(Time::Timepoint time, Cmd::SharedPtr command)
 {
-	std::shared_ptr<CmdTimer> timer = std::make_shared<CmdTimerPosix>();
-	timer->SetCmd(command);
+	std::shared_ptr<CmdTimer> timer = std::make_shared<PlatformCmdTimer>(command, shared_from_this());
 	timer->StartAbsolute(time);
 
 	std::unique_lock<std::mutex> lock(_mutex);

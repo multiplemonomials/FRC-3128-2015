@@ -52,6 +52,8 @@ LogCore::instance().log(logMessage); \
 std::shared_ptr<LogMessage> logMessage(new LogMessage({{"time", currentTime()}, {"severity", "Fatal"}})); \
 logMessage->stream() << args;\
 LogCore::instance().log(logMessage); \
+std::this_thread::sleep_for(std::chrono::milliseconds(100));\
+exit(2); \
 }
 
 #else

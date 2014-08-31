@@ -1,6 +1,8 @@
 #ifndef CMD_TIMER_POSIX_H
 #define CMD_TIMER_POSIX_H
 
+#if 0
+
 #include <csignal>
 #include <ctime>
 #include <signal.h>
@@ -85,6 +87,9 @@ class CmdTimerPosix : public CmdTimer
         // Ctor. (without multiplex)
         explicit CmdTimerPosixImpl(Cmd::SharedPtr command);
 
+        //Ctor. (with duration)
+        explicit CmdTimerPosixImpl(Cmd::SharedPtr command, Time::Duration timeRelative);
+
         // Ctor.
         explicit CmdTimerPosixImpl();
 
@@ -147,6 +152,13 @@ public:
     // Ctor. (without multiplex)
     explicit CmdTimerPosix(Cmd::SharedPtr command)
     : _pImpl(new CmdTimerPosixImpl(command))
+    {
+
+    }
+
+    // Ctor. (with duration)
+    explicit CmdTimerPosix(Cmd::SharedPtr command, Time::Duration timeRelative)
+    : _pImpl(new CmdTimerPosixImpl(command, timeRelative))
     {
 
     }
@@ -217,5 +229,7 @@ public:
         _pImpl->Cancel();
     }
 };
+
+#endif // WIN32
 
 #endif /* CMD_TIMER_POSIX_H */

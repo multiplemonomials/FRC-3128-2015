@@ -6,88 +6,80 @@
  */
 
 #include <EventManager/CmdTimerWin32.h>
+#include <LogMacros.h>
+#include <Exception.h>
+#include <Util/Ptr.h>
+
+UINT_PTR CmdTimerWin32::CmdTimerWin32Impl::guaranteedUnusedID = 1;
+
+std::set<UINT_PTR> CmdTimerWin32::CmdTimerWin32Impl::_usedIDs({0});
+
+std::map<UINT_PTR, std::shared_ptr<CmdTimerWin32::CmdTimerWin32Impl>> CmdTimerWin32::CmdTimerWin32Impl::_idToTimerMap{};
+
+std::mutex CmdTimerWin32::CmdTimerWin32Impl::_mapMutex{};
 
 /*-----------------------------------------------------------------------------
 
  ----------------------------------------------------------------------------*/
 
-void CmdTimerWin32::CmdTimerWin32Impl::TimerCreate()
+void CmdTimerWin32::CmdTimerWin32Impl::TimerSetTime(UINT const & milliseconds)
 {
-    // Invoke sigev_notify_function as if it were the start function of a new thread.
-    mySigEvent.sigev_notify = SIGEV_THREAD;
+	HWND window = GetForegroundWindow();
 
+	if(_timerID == 0)
+	{
+		//create a new timer
+		std::unique_lock<std::mutex>(_mapMutex);
 
-    // Static function shared by all instances of this class.
-    mySigEvent.sigev_notify_function = CmdTimerWin32::CmdTimerWin32Impl::TimerHandler;
+		//the second argument doesn't matter so long as it is not already a used ID
+		_timerID = SetTimer(window, guaranteedUnusedID, milliseconds, &CmdTimerWin32::CmdTimerWin32Impl::TimerHandler);
 
+		LOG_DEBUG("Generated timer with id " << _timerID)
 
-    // This value will be returned to TimerHandler() when the timer expires.
-    mySigEvent.sigev_value.sival_ptr = this;
+		//step 1: mark this as used
+		_usedIDs.insert(_timerID);
 
+		//step 2: make sure that the guarenteed unique ID is not the one that was taken
+		while(_usedIDs.find(guaranteedUnusedID) != _usedIDs.end())
+		{
+			++guaranteedUnusedID;
+		}
 
-    // Create the POSIX timer, placing the ID in _timerid.
-    if(timer_create(CLOCK_REALTIME, &mySigEvent, &_timerId) != 0)
-    {
-        LOG_FATAL("Error creating POSIX timer.  Errno = " <<  errno);
-        ASSERT(false);
-    }
+		//step 3: register this as the timer for the ID
+		_idToTimerMap.insert(std::pair<UINT_PTR, std::shared_ptr<CmdTimerWin32::CmdTimerWin32Impl>>(_timerID, shared_from_this()));
+	}
+	else
+	{
+		SetTimer(window, _timerID, milliseconds, &CmdTimerWin32::CmdTimerWin32Impl::TimerHandler);
+	}
+
+	if(_timerID == 0)
+	{
+		DWORD lastError = GetLastError();
+		LOG_RECOVERABLE("Failed to create Win32 Timer: error code " << lastError << ": " << strerror(lastError));
+	}
 }
 
-
 /*-----------------------------------------------------------------------------
 
  ----------------------------------------------------------------------------*/
 
-void CmdTimerWin32::CmdTimerWin32Impl::TimerSetTime
-(
-    time_t const &  seconds,
-    long const &    nanoseconds
-)
-{
-
-	//the second argument doesn't matter so long as it is not already a used ID
-    SetTimer(nullptr, 9544);
-
-
-    // Set the timer (don't bother getting the current value).
-    if(timer_settime(_timerId, 0, &myItimerspec, nullptr) != 0)
-    {
-        LOG_FATAL("Error setting POSIX timer.  Errno = " <<  errno);
-        ASSERT(false);
-    }
-
-
-    //LOG_DEBUG("CmdTimerWin32::CmdTimerWin32Impl::TimerSetTime() Set time to " << seconds << " seconds, " << nanoseconds << " nanoseconds.");
-}
-
-/*-----------------------------------------------------------------------------
-
- ----------------------------------------------------------------------------*/
-
-bool CmdTimerWin32::CmdTimerWin32Impl::TimerIsRunning()
-{
-	DEFINE_ZEROED_STRUCT(struct itimerspec, myItimerspec);
-
-	timer_gettime(_timerId, &myItimerspec);
-
-	// "If the value returned in itimerspec->curr_value->it_value is zero, then
-    //the timer is currently disarmed."
-	return (myItimerspec.it_value.tv_nsec != 0) || (myItimerspec.it_value.tv_sec != 0);
-}
-
-
-/*-----------------------------------------------------------------------------
-
- ----------------------------------------------------------------------------*/
-
-void CmdTimerWin32::CmdTimerWin32Impl::TimerDelete()
+void CmdTimerWin32::CmdTimerWin32Impl::Cancel()
 {
     // Tell the O/S we're done with the timer.
-    if (timer_delete(_timerId) != 0)
+    if(KillTimer(nullptr, _timerID))
     {
-        LOG_FATAL("Error deleting POSIX timer.  Errno = " <<  errno);
-        ASSERT(false);
+    	LOG_FATAL("Failed to delete timer with ID" << _timerID)
     }
+
+    //remove from our database
+
+	std::unique_lock<std::mutex> lock(_mapMutex);
+    _idToTimerMap.erase(_timerID);
+
+    _usedIDs.erase(_timerID);
+
+    _timerID = 0;
 }
 
 
@@ -95,13 +87,22 @@ void CmdTimerWin32::CmdTimerWin32Impl::TimerDelete()
     Static callback function shared by all CmdTimerWin32Impl timers.
  ----------------------------------------------------------------------------*/
 
-void CmdTimerWin32::CmdTimerWin32Impl::TimerHandler(union sigval sigVal)
+void CmdTimerWin32::CmdTimerWin32Impl::TimerHandler(HWND windowHandle, UINT uMsg, UINT_PTR idEvent, DWORD elapsedTime)
 {
+	std::shared_ptr<CmdTimerWin32Impl> 	timerPtr;
 
+	try
+	{
+		std::unique_lock<std::mutex> lock(_mapMutex);
+		timerPtr = _idToTimerMap.at(idEvent);
+	}
+	catch(std::out_of_range & error)
+	{
+		LOG_UNUSUAL("Couldn't look up timer id " << idEvent << " from map, ignoring event")
+		return;
+	}
 
-    CmdTimerWin32Impl * 	timerPtr((CmdTimerWin32Impl *)sigVal.sival_ptr);
-
-    //LOG_DEBUG("CmdTimerWin32Impl::TimerHandler() firing (timerPtr = " << Ptr(timerPtr).ToString() << ").");
+    //LOG_DEBUG("CmdTimerWin32Impl::TimerHandler() firing (timerID = " << timerPtr->_timerID << ").");
 
     //invoke the handler of that particular object
     timerPtr->operator()();
@@ -133,60 +134,55 @@ void CmdTimerWin32::CmdTimerWin32Impl::operator()()
 }
 
 /*-----------------------------------------------------------------------------
-
+	constructors
  ----------------------------------------------------------------------------*/
 
-CmdTimerWin32::CmdTimerWin32Impl::CmdTimerWin32Impl()
-: CmdTimerWin32Impl(Cmd::SharedPtr(), nullptr)
-{
-
-}
-
-/*-----------------------------------------------------------------------------
-	Base constructor
- ----------------------------------------------------------------------------*/
-
-CmdTimerWin32::CmdTimerWin32Impl::CmdTimerWin32Impl(Cmd::SharedPtr command, CmdTimerMultiplex * multiplex)
-:	_multiplex(multiplex),
+// Ctor.
+CmdTimerWin32::CmdTimerWin32Impl::CmdTimerWin32Impl(Cmd::SharedPtr command, Time::Duration timeRelative)
+:	_multiplex(),
     _cmdToInvoke(command),
-    _timerId(nullptr)
+    _timerID(0)
 {
     // Create the O/S timer.
-    TimerCreate();
+    StartRelative(timeRelative);
 
     LOG_DEBUG("CmdTimerWin32Impl() complete (this = " << Ptr(this).ToString() << ").");
 }
 
-/*-----------------------------------------------------------------------------
-
- ----------------------------------------------------------------------------*/
+// Ctor.
 CmdTimerWin32::CmdTimerWin32Impl::CmdTimerWin32Impl(Cmd::SharedPtr command)
-: CmdTimerWin32Impl(command, nullptr)
+:	_multiplex(),
+    _cmdToInvoke(command),
+    _timerID(0)
 {
-
+    LOG_DEBUG("CmdTimerWin32Impl() complete (this = " << Ptr(this).ToString() << ").");
 }
 
-/*-----------------------------------------------------------------------------
-
- ----------------------------------------------------------------------------*/
-CmdTimerWin32::CmdTimerWin32Impl::CmdTimerWin32Impl(CmdTimerMultiplex * multiplex)
-: CmdTimerWin32Impl(Cmd::SharedPtr(), multiplex)
+// Ctor.
+CmdTimerWin32::CmdTimerWin32Impl::CmdTimerWin32Impl()
+:	_multiplex(),
+    _cmdToInvoke(),
+    _timerID(0)
 {
-
+    LOG_DEBUG("CmdTimerWin32Impl() complete (this = " << Ptr(this).ToString() << ").");
 }
 
+// Ctor.
+CmdTimerWin32::CmdTimerWin32Impl::CmdTimerWin32Impl(Cmd::SharedPtr command, std::shared_ptr<CmdTimerMultiplex> multiplex)
+:	_multiplex(multiplex),
+    _cmdToInvoke(command),
+    _timerID(0)
+{
+    LOG_DEBUG("CmdTimerWin32Impl() complete (this = " << Ptr(this).ToString() << ").");
+}
 /*-----------------------------------------------------------------------------
 
  ----------------------------------------------------------------------------*/
 
 CmdTimerWin32::CmdTimerWin32Impl::~CmdTimerWin32Impl()
 {
-    // Cancel the timer (in case it's still running).
-    Cancel();
-
-
     // Delete the O/S timer.
-    TimerDelete();
+    Cancel();
 
 
     LOG_DEBUG("~CmdTimerWin32Impl() complete (this = " << Ptr(this).ToString() << ").");
@@ -215,7 +211,7 @@ void CmdTimerWin32::CmdTimerWin32Impl::StartRelative(Time::Duration invocationDe
 
     // Set the timer.
     // Note: fractional_seconds() returns microseconds--convert here to nanoseconds.
-    TimerSetTime(invocationDelay.total_seconds(), (invocationDelay.fractional_seconds() * 1000));
+    TimerSetTime(invocationDelay.total_milliseconds());
 }
 
 
@@ -237,12 +233,3 @@ void CmdTimerWin32::CmdTimerWin32Impl::StartAbsolute(Time::Timepoint invocationT
     StartRelative(delay);
 }
 
-/*-----------------------------------------------------------------------------
-
- ----------------------------------------------------------------------------*/
-
-void CmdTimerWin32::CmdTimerWin32Impl::Cancel()
-{
-    // Cancel the timer.
-    TimerSetTime(0, 0);
-}

@@ -1,3 +1,4 @@
+#if 0
 
 #include "CmdTimerPosix.h"
 #include "Util/DefineZeroedStruct.h"
@@ -182,6 +183,15 @@ CmdTimerPosix::CmdTimerPosixImpl::CmdTimerPosixImpl(Cmd::SharedPtr command)
 /*-----------------------------------------------------------------------------
 
  ----------------------------------------------------------------------------*/
+CmdTimerPosix::CmdTimerPosixImpl::CmdTimerPosixImpl(Cmd::SharedPtr command, Time::Duration timeRelative)
+: CmdTimerPosixImpl(command, nullptr)
+{
+
+}
+
+/*-----------------------------------------------------------------------------
+
+ ----------------------------------------------------------------------------*/
 CmdTimerPosix::CmdTimerPosixImpl::CmdTimerPosixImpl(CmdTimerMultiplex * multiplex)
 : CmdTimerPosixImpl(Cmd::SharedPtr(), multiplex)
 {
@@ -259,3 +269,5 @@ void CmdTimerPosix::CmdTimerPosixImpl::Cancel()
     // Cancel the timer.
     TimerSetTime(0, 0);
 }
+
+#endif // WIN32

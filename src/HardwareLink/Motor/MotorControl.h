@@ -10,9 +10,8 @@
 
 #include <Util/Time.h>
 #include "MotorLink.h"
-#include <EventManager/CmdTimerPosix.h>
 #include <mutex>
-
+#include <EventManager/CmdTimerSelector.h>
 
 /*
  * Base class for the two motor speed controllers, LinearAngleTarget
@@ -29,7 +28,7 @@ protected:
     std::mutex _mutex;
 
     //timer object to regularly call execute()
-    CmdTimerPosix _speedSetScheduler;
+    PlatformCmdTimer _speedSetScheduler;
 
 public:
 
